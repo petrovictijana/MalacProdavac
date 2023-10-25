@@ -1,11 +1,11 @@
-package batmobile.batmobile
+package server.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class BatmobileApplication
+class ServerApplication
 
 fun main(args: Array<String>) {
-	runApplication<BatmobileApplication>(*args)
+	runApplication<ServerApplication>(*args)
 }
