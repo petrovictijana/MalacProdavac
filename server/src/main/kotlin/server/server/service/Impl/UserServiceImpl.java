@@ -1,18 +1,97 @@
 package server.server.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.server.dtos.request.UserRegistrationRequest;
+import server.server.dtos.response.EmailUsernameAvailabilityResponse;
+import server.server.dtos.response.PibAlreadyExistsResponse;
+import server.server.enums.Roles;
+import server.server.models.Deliverer;
+import server.server.models.DriversLicenses;
+import server.server.models.Seller;
 import server.server.models.User;
+import server.server.repository.DelivererRepository;
+import server.server.repository.DriversLicensesRepository;
+import server.server.repository.SellerRepository;
 import server.server.repository.UserRepository;
 import server.server.service.UserService;
+
+import java.util.ArrayList;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SellerRepository sellerRepository;
+    @Autowired
+    DriversLicensesRepository driversLicensesRepository;
+    @Autowired
+    DelivererRepository delivererRepository;
+
+    /**
+     * Proveravanje ispravnosti unetih podataka prilikom registracije i njihove jedinstvenosti (username, email)
+     * @param userRegistrationRequest request koji salje client
+     * @return objekat koji sadrzi podatke da li su username i email jedinstveni
+     */
     @Override
-    public User createNewUser(UserRegistrationRequest userRegistrationRequest) {
+    public ResponseEntity<EmailUsernameAvailabilityResponse> checkNewUserData(UserRegistrationRequest userRegistrationRequest) {
+        boolean isUsernameAlredyTaken = isUsernameAlreadyTaken(userRegistrationRequest.getUsername());
+        boolean isEmailAlredyTaken = isEmailAlredyTaken(userRegistrationRequest.getEmail());
+
+        EmailUsernameAvailabilityResponse response = new EmailUsernameAvailabilityResponse(isUsernameAlredyTaken, isEmailAlredyTaken);
+
+        if(isUsernameAlredyTaken || isEmailAlredyTaken)
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * Proverava se da li je username zauzet
+     * @param username
+     * @return Boolean da li je username zauzet
+     */
+    private boolean isUsernameAlreadyTaken(String username){
+        return userRepository.findByUsername(username) != null ? true : false;
+    }
+
+    /**
+     * Provera da li je email zauzet
+     * @param email
+     * @return Boolean da li je email zauzet
+     */
+    private boolean isEmailAlredyTaken(String email){
+        return userRepository.findByEmail(email) != null ? true : false;
+    }
+
+    private boolean isPibAlreadyExists(String pib){
+        return sellerRepository.findByPib(pib) != null ? true : false;
+    }
+
+    /**
+     * Kreiranje novog korisnika
+     * @param userRegistrationRequest objekat sa podacima neophodnih za kreiranje novog korisnika
+     * @return potvrda da je novi korisnik uspesno kreiran
+     */
+    @Override
+    public ResponseEntity<?> createNewUser(UserRegistrationRequest userRegistrationRequest) {
+        ResponseEntity<EmailUsernameAvailabilityResponse> response = checkNewUserData(userRegistrationRequest);
+        if(response.getBody().isEmailTaken() || response.getBody().isUsernameTaken())
+            return response;
+
+        if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
+            //Ukoliko je u pitanju prodavac
+            boolean isPibAlredyTaken = isPibAlreadyExists(userRegistrationRequest.getPib());
+            if(isPibAlreadyExists(userRegistrationRequest.getPib())){
+                //Ukoliko uneti pib vec postoji u bazi podataka
+                return new ResponseEntity<>(new PibAlreadyExistsResponse(true), HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        //Korisnik moze napraviti nalog sa unetim podacima
         User newUser = User.builder()
                 .name(userRegistrationRequest.getName())
                 .surname(userRegistrationRequest.getSurname())
@@ -22,6 +101,56 @@ public class UserServiceImpl implements UserService {
                 .picture(userRegistrationRequest.getPicture())
                 .roleId(userRegistrationRequest.getRoleId())
                 .build();
-        return userRepository.save(newUser);
+
+        //Kreiran nov korisnik
+        User createdUser = userRepository.save(newUser);
+        if(createdUser == null){
+            //Nesto nije kako treba
+            return new ResponseEntity<>("Dodavanje novog korisnika nije uspelo", HttpStatus.BAD_REQUEST);
+        }
+
+        if(userRegistrationRequest.getRoleId() == Roles.DELIVERY_DRIVER.ordinal()){
+            //Ukoliko je dostavljac
+            //Dodavanje dostavljaca
+            Deliverer deliverer = Deliverer.builder()
+                    .delivererId(createdUser.getUserId())
+                    .location(userRegistrationRequest.getLocation())
+                    .build();
+            Deliverer createdDeliverer = delivererRepository.save(deliverer);
+
+            if(createdDeliverer == null){
+                return new ResponseEntity<>("Dodavanje dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
+            }
+
+            ArrayList<DriversLicenses> driversLicensesArrayList = new ArrayList<>();
+            for(int i = 0; i < userRegistrationRequest.getLicenceCategories().size(); i++){
+                DriversLicenses driversLicenses = new DriversLicenses(
+                        createdDeliverer.getDelivererId(),
+                        userRegistrationRequest.getLicenceCategories().get(i));
+
+                //Dodati u tabelu DriversLicenses
+                if(driversLicensesRepository.save(driversLicenses) == null){
+                    //Nesto nije kako treba
+                    return new ResponseEntity<>("Dodavanje vozackih kategorija dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
+        if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
+            //Dodati u tabelu sellers
+            Seller seller = Seller.builder()
+                            .sellerId(createdUser.getUserId())
+                            .pib(userRegistrationRequest.getPib())
+                            .address(userRegistrationRequest.getLocation())
+                            .build();
+            sellerRepository.save(seller);
+
+            if(sellerRepository.save(seller) == null){
+                //Nesto nije kako treba
+                return new ResponseEntity<>("Dodavanje prodavca nije uspelo", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        return new ResponseEntity<>("Novi korisnik je dodat", HttpStatus.OK);
     }
 }
