@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,4 +19,9 @@ public class UserRegistrationRequest {
     private String email;
     private String picture;
     private int roleId;
+    //Za dostavljaca
+    private ArrayList<Long> licenceCategories;
+    //Za prodavca
+    private String pib;
+    private String location;
 }
