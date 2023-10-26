@@ -16,12 +16,10 @@ import server.server.repository.DelivererRepository;
 import server.server.repository.DriversLicensesRepository;
 import server.server.repository.SellerRepository;
 import server.server.repository.UserRepository;
-import server.server.service.UserService;
-
-import java.util.ArrayList;
+import server.server.service.RegistrationService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     UserRepository userRepository;
     @Autowired

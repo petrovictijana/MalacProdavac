@@ -1,16 +1,19 @@
 package server.server.controller;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.server.dtos.request.UserLoginRequest;
 import server.server.dtos.request.UserRegistrationRequest;
-import server.server.service.UserService;
+import server.server.service.RegistrationService;
 
 @RestController
 @RequestMapping
-public class UserContoller {
+@Api(tags = "User")
+public class UserController {
     @Autowired
-    UserService userService;
+    RegistrationService userService;
 
     @GetMapping("/registration/step1")
     public ResponseEntity<?> checkNewUserData(
@@ -18,12 +21,19 @@ public class UserContoller {
     ){
         return userService.checkNewUserData(userRegistrationRequest);
     }
+
     @PostMapping("/registration")
     public ResponseEntity<?> userRegistration(
             @RequestBody UserRegistrationRequest userRegistrationRequest
     ){
         return userService.createNewUser(userRegistrationRequest);
-
-//        return response != null ? ResponseEntity.ok("Korisnik uspesno kreiran") : ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/login")
+    public ResponseEntity<?> loginUser(
+            @RequestBody UserLoginRequest userLoginRequest
+            ){
+        return null;
+    }
+
 }
