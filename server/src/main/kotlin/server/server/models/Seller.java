@@ -1,8 +1,10 @@
 package server.server.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 @Entity
+@Builder
 public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
