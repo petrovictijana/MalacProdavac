@@ -3,7 +3,9 @@ package server.server.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import server.server.dtos.HashedPassword;
 import server.server.dtos.request.UserRegistrationRequest;
 import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 import server.server.dtos.response.PibAlreadyExistsResponse;
@@ -17,6 +19,7 @@ import server.server.repository.DriversLicensesRepository;
 import server.server.repository.SellerRepository;
 import server.server.repository.UserRepository;
 import server.server.service.RegistrationService;
+import server.server.utilities.PasswordEncoderCustom;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -29,11 +32,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     DelivererRepository delivererRepository;
 
-    /**
-     * Proveravanje ispravnosti unetih podataka prilikom registracije i njihove jedinstvenosti (username, email)
-     * @param userRegistrationRequest request koji salje client
-     * @return objekat koji sadrzi podatke da li su username i email jedinstveni
-     */
     @Override
     public ResponseEntity<EmailUsernameAvailabilityResponse> checkNewUserData(UserRegistrationRequest userRegistrationRequest) {
         boolean isUsernameAlredyTaken = isUsernameAlreadyTaken(userRegistrationRequest.getUsername());
@@ -46,12 +44,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    /**
-     * Kreiranje novog korisnika
-     * @param userRegistrationRequest objekat sa podacima neophodnih za kreiranje novog korisnika
-     * @return potvrda da je novi korisnik uspesno kreiran
-     */
     @Override
     public ResponseEntity<?> createNewUser(UserRegistrationRequest userRegistrationRequest) {
         ResponseEntity<EmailUsernameAvailabilityResponse> response = checkNewUserData(userRegistrationRequest);
@@ -67,11 +59,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         //Korisnik moze napraviti nalog sa unetim podacima
+        //HashedPassword hashedPassword = PasswordEncoderCustom.passwordEncoder(userRegistrationRequest.getPassword());
         User newUser = User.builder()
                 .name(userRegistrationRequest.getName())
                 .surname(userRegistrationRequest.getSurname())
                 .username(userRegistrationRequest.getUsername())
-                .password(userRegistrationRequest.getPassword())
+                .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
                 .picture(userRegistrationRequest.getPicture())
                 .roleId(userRegistrationRequest.getRoleId())

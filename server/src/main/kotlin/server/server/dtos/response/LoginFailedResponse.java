@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsernameAlreadyExists {
-    String message;
+public class LoginFailedResponse {
+    boolean isUsernameIncorrect;
+    boolean isPasswordIncorrect;
 }

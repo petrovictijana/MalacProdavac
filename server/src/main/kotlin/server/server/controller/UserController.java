@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.server.dtos.request.UserLoginRequest;
 import server.server.dtos.request.UserRegistrationRequest;
+import server.server.models.User;
 import server.server.service.LoginService;
 import server.server.service.RegistrationService;
 
