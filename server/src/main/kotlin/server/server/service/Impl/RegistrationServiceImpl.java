@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import server.server.dtos.HashedPassword;
 import server.server.dtos.request.UserRegistrationRequest;
 import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 import server.server.dtos.response.PibAlreadyExistsResponse;
@@ -19,7 +18,6 @@ import server.server.repository.DriversLicensesRepository;
 import server.server.repository.SellerRepository;
 import server.server.repository.UserRepository;
 import server.server.service.RegistrationService;
-import server.server.utilities.PasswordEncoderCustom;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -59,7 +57,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         //Korisnik moze napraviti nalog sa unetim podacima
-        //HashedPassword hashedPassword = PasswordEncoderCustom.passwordEncoder(userRegistrationRequest.getPassword());
         User newUser = User.builder()
                 .name(userRegistrationRequest.getName())
                 .surname(userRegistrationRequest.getSurname())
