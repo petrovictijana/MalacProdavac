@@ -50,28 +50,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Proverava se da li je username zauzet
-     * @param username
-     * @return Boolean da li je username zauzet
-     */
-    private boolean isUsernameAlreadyTaken(String username){
-        return userRepository.findByUsername(username) != null ? true : false;
-    }
-
-    /**
-     * Provera da li je email zauzet
-     * @param email
-     * @return Boolean da li je email zauzet
-     */
-    private boolean isEmailAlredyTaken(String email){
-        return userRepository.findByEmail(email) != null ? true : false;
-    }
-
-    private boolean isPibAlreadyExists(String pib){
-        return sellerRepository.findByPib(pib) != null ? true : false;
-    }
-
-    /**
      * Kreiranje novog korisnika
      * @param userRegistrationRequest objekat sa podacima neophodnih za kreiranje novog korisnika
      * @return potvrda da je novi korisnik uspesno kreiran
@@ -84,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
         if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
             //Ukoliko je u pitanju prodavac
-            boolean isPibAlredyTaken = isPibAlreadyExists(userRegistrationRequest.getPib());
             if(isPibAlreadyExists(userRegistrationRequest.getPib())){
                 //Ukoliko uneti pib vec postoji u bazi podataka
                 return new ResponseEntity<>(new PibAlreadyExistsResponse(true), HttpStatus.BAD_REQUEST);
@@ -109,6 +86,7 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Dodavanje novog korisnika nije uspelo", HttpStatus.BAD_REQUEST);
         }
 
+        //Ukoliko je korisnik uspesno kreiran treba ga dodeliti u role
         if(userRegistrationRequest.getRoleId() == Roles.DELIVERY_DRIVER.ordinal()){
             //Ukoliko je dostavljac
             //Dodavanje dostavljaca
@@ -122,17 +100,14 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>("Dodavanje dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
             }
 
-            ArrayList<DriversLicenses> driversLicensesArrayList = new ArrayList<>();
-            for(int i = 0; i < userRegistrationRequest.getLicenceCategories().size(); i++){
-                DriversLicenses driversLicenses = new DriversLicenses(
+            for (Long licenceId: userRegistrationRequest.getLicenceCategories()) {
+                DriversLicenses driversLicense = new DriversLicenses(
                         createdDeliverer.getDelivererId(),
-                        userRegistrationRequest.getLicenceCategories().get(i));
+                        licenceId
+                );
 
-                //Dodati u tabelu DriversLicenses
-                if(driversLicensesRepository.save(driversLicenses) == null){
-                    //Nesto nije kako treba
+                if(driversLicensesRepository.save(driversLicense) == null)
                     return new ResponseEntity<>("Dodavanje vozackih kategorija dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
-                }
             }
         }
 
@@ -152,5 +127,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return new ResponseEntity<>("Novi korisnik je dodat", HttpStatus.OK);
+    }
+
+
+
+
+    private boolean isUsernameAlreadyTaken(String username){
+        return userRepository.findByUsername(username) != null ? true : false;
+    }
+    private boolean isEmailAlredyTaken(String email){
+        return userRepository.findByEmail(email) != null ? true : false;
+    }
+    private boolean isPibAlreadyExists(String pib){
+        return sellerRepository.findByPib(pib) != null ? true : false;
     }
 }
