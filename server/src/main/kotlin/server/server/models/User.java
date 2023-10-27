@@ -23,8 +23,7 @@ public class User{
     private String email;
     private String picture;
 
-    @Column(name = "role_id")
-    int roleId;
+    private long role_id;
 
     @Override
     public String toString() {
@@ -36,7 +35,7 @@ public class User{
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", picture='" + picture + '\'' +
-                ", roleId=" + roleId +
+                ", role_id=" + role_id +
                 '}';
     }
 }

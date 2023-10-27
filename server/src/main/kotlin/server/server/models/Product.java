@@ -21,6 +21,8 @@ public class Product {
     private int idCategory;
     private int idMeasurement;
 
+
+
     public Product() {
     }
 

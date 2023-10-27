@@ -7,7 +7,6 @@ import lombok.Builder;
 @Builder
 public class Deliverer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deliverer_id")
     private Long delivererId;
 
