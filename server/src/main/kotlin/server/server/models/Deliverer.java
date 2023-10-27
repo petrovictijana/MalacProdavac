@@ -1,8 +1,10 @@
 package server.server.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 @Entity
+@Builder
 public class Deliverer {
     @Id
     @Column(name = "deliverer_id")

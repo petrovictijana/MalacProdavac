@@ -3,8 +3,11 @@ package server.server.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import server.server.models.compositeKeys.DriverLicensesKey;
 
 @Entity
+@IdClass(DriverLicensesKey.class)
 public class DriversLicenses {
     @Id
     @Column(name="user_id")

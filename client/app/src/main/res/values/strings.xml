@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BatMobile</string>
+
+    <string name="malac_prodavac">Malac Prodavac</string>
+    <string name="slogan">Mali proizvođači, veliki izbor!</string>
+
 </resources>

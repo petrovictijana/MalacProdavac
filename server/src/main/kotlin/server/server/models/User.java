@@ -9,7 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+@Table(name = "users")
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -22,6 +23,7 @@ public class User {
     private String email;
     private String picture;
 
+    @Column(name = "role_id")
     private long role_id;
 
     @Override
