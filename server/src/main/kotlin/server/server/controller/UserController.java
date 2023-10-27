@@ -11,7 +11,8 @@ import server.server.service.LoginService;
 import server.server.service.RegistrationService;
 
 @RestController
-@RequestMapping
+@RequestMapping(path = "/users")
+@Api(tags = "User")
 public class UserController {
     @Autowired
     RegistrationService registrationService;
