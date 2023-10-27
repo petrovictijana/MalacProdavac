@@ -26,6 +26,8 @@ public class DrivingCategory {
         this.categoryName = categoryName;
     }
 
+
+
     public Long getDrivingCategoryId() {
         return drivingCategoryId;
     }

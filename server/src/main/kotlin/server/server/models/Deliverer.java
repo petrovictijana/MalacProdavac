@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 public class Deliverer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deliverer_id")
     private Long delivererId;
 
