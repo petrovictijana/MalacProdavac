@@ -8,13 +8,21 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.batmobile.network.ApiClient
+import com.example.batmobile.network.Config
+import com.example.batmobile.services.Authenticate
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
-    var input_password:EditText? = null;
+    lateinit var input_username:EditText
+    lateinit var input_password:EditText
+    lateinit var btn_username:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -23,7 +31,17 @@ class LoginActivity : AppCompatActivity() {
         val button_switch_Registruj_se = findViewById<Button>(R.id.switch_Registruj_se)
         setRadiusOnButton(button_switch_Prijavi_se, 12f, 0f , 12f , 0f)
         setRadiusOnButton(button_switch_Registruj_se, 0f, 12f , 0f , 12f)
+
+        this.input_username = findViewById<EditText>(R.id.username)
         this.input_password = findViewById<EditText>(R.id.password)
+
+        this.btn_username = findViewById<Button>(R.id.prijavi_se)
+        this.btn_username.setOnClickListener(object : OnClickListener{
+            override fun onClick(v: View?) {
+                sendLoginRequest()
+            }
+        })
+
     }
     fun goToTheMainActivity(view:View){
         val intent: Intent = Intent(this, MainActivity::class.java)
@@ -67,5 +85,35 @@ class LoginActivity : AppCompatActivity() {
         }
 
         input.setSelection(selectionStart, selectionEnd)
+    }
+
+//    Send Login
+    fun sendLoginRequest(){
+        val response = Authenticate.authenticateLogin(input_username, input_password)
+        if (response)
+        {
+            val apiCall: ApiClient = ApiClient(this)
+
+            var url:String = Config.ip_address+":"+Config.port + "/api/v1/user/login"
+            println(url)
+            val jsonObject: JSONObject = JSONObject()
+            jsonObject.put("email",input_username.text.toString())
+            jsonObject.put("password",input_password.text.toString())
+            println(jsonObject)
+            apiCall.sendPostRequestWithJSONObject(
+                url,
+                jsonObject,
+                {
+                    response->
+                        println(response)
+                        Toast.makeText(this, "Uspesno ste se ulogovali", Toast.LENGTH_LONG).show()
+                },
+                {
+                    error->
+                        Toast.makeText(this, "NisteSeUlogovali", Toast.LENGTH_LONG).show()
+                        error.printStackTrace()
+                        println(error.message)
+            })
+        }
     }
 }
