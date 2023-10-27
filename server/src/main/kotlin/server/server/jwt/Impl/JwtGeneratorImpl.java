@@ -20,7 +20,7 @@ public class JwtGeneratorImpl implements JwtGenerator {
     public String generateJwtToken(User user) {
         String jwt = Jwts.builder()
                 .setSubject(user.getUsername())
-                .claim("role", user.getRoleId())
+                .claim("role", user.getRole_id())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

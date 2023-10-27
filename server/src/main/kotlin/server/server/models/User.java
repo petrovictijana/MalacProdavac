@@ -23,6 +23,7 @@ public class User{
     private String email;
     private String picture;
 
+    @Column(name = "role_id")
     private long role_id;
 
     @Override
