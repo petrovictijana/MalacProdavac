@@ -9,7 +9,7 @@ import server.server.service.LoginService;
 import server.server.service.RegistrationService;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping
 public class UserController {
     @Autowired
     RegistrationService registrationService;
