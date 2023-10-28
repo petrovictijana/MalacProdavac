@@ -48,4 +48,5 @@ dependencies {
     implementation ("org.osmdroid:osmdroid-android:6.1.10")
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 }
