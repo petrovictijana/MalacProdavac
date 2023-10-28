@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".RegisterActivity">
+    tools:context=".activities.RegisterActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="411dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp"
@@ -18,10 +18,10 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="15dp"
             android:contentDescription="go back"
             android:onClick="goToTheMainActivity"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/balsamiq_sans"
             android:paddingLeft="2dp"
-            android:paddingTop="12dp"
+            android:paddingTop="19dp"
             android:paddingRight="54dp"
             android:paddingBottom="12dp"
             android:text="Registracija korisnika"

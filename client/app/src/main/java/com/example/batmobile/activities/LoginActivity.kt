@@ -1,19 +1,17 @@
-package com.example.batmobile
+package com.example.batmobile.activities
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import com.example.batmobile.R
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.example.batmobile.services.Authenticate

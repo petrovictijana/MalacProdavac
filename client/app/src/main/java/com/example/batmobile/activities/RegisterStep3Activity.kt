@@ -1,9 +1,10 @@
-package com.example.batmobile
+package com.example.batmobile.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.batmobile.R
 
 class RegisterStep3Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
