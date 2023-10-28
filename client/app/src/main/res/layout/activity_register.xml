@@ -78,7 +78,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Unesite ime:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -117,7 +117,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Unesite prezime:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -156,7 +156,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Unesite korisničko ime:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -195,7 +195,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Unesite email:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -234,7 +234,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Unesite lozinku:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -273,7 +273,7 @@
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/inter_semibold"
             android:text="Potvrdite lozinku:"
-            android:textColor="@color/black"
+            android:textColor="@color/grey"
             android:textSize="12dp"
             tools:ignore="TextSizeCheck" />
 
@@ -327,6 +327,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:ignore="TouchTargetSizeCheck"
-        android:elevation="4dp"/>
+        android:elevation="4dp"
+        android:onClick="goToStep_2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
