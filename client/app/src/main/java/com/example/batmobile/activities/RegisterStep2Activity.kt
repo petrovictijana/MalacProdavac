@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.Toast
@@ -29,6 +30,7 @@ class RegisterStep2Activity : AppCompatActivity() {
     private lateinit var kupacOptionsLayout: LinearLayout
     private lateinit var prodavacOptionsLayout: LinearLayout
     private lateinit var dostavljacOptionsLayout: LinearLayout
+    private lateinit var nastaviButton: Button
 
     lateinit var mapView: MapView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -47,35 +49,49 @@ class RegisterStep2Activity : AppCompatActivity() {
         prodavacOptionsLayout = findViewById<LinearLayout>(R.id.prodavacOptionsLayout)
         dostavljacOptionsLayout = findViewById<LinearLayout>(R.id.dostavljacOptionsLayout)
 
+        nastaviButton = findViewById<Button>(R.id.Nastavi)
+
         kupacRadioButton.setOnClickListener {
             kupacOptionsLayout.visibility = View.VISIBLE
             dostavljacOptionsLayout.visibility=View.GONE
             prodavacOptionsLayout.visibility = View.GONE
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = true
         }
 
         prodavacRadioButton.setOnClickListener {
             kupacOptionsLayout.visibility = View.GONE
             dostavljacOptionsLayout.visibility=View.GONE
             prodavacOptionsLayout.visibility = View.VISIBLE
+
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = true
+
+            mapView = findViewById(R.id.mapView)
+            setInitMap()
+
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
+                getLocation()
+            } else {
+                // Ako nemate dozvolu, zatražite je od korisnika
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+            }
         }
 
         dostavljacRadioButton.setOnClickListener{
             kupacOptionsLayout.visibility = View.GONE
             dostavljacOptionsLayout.visibility=View.VISIBLE
             prodavacOptionsLayout.visibility = View.GONE
+
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = true
         }
 
-        mapView = findViewById(R.id.mapView)
-        setInitMap()
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
-            getLocation()
-        } else {
-            // Ako nemate dozvolu, zatražite je od korisnika
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
-        }
     }
     fun goToRegisterActivity(view:View){
         val intent: Intent = Intent(this, RegisterActivity::class.java)
