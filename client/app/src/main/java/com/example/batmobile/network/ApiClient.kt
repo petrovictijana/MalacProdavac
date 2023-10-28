@@ -1,6 +1,7 @@
 package com.example.batmobile.network
 
 import android.content.Context
+import android.location.Geocoder
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -8,7 +9,11 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.JsonObjectRequest
+import okhttp3.OkHttpClient
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
+import java.io.IOException
 
 class ApiClient(private val context: Context): ApiInterface {
 
@@ -51,5 +56,73 @@ class ApiClient(private val context: Context): ApiInterface {
             {error -> onError(error)}
         )
         queue.add(jsonObjectRequest)
+    }
+
+    override fun getCoordinatesForAddress(
+        address: String,
+        callback: (Double, Double) -> Unit,
+        errorCallback: () -> Unit
+    ) {
+        val client = OkHttpClient()
+        val baseUrl = "https://nominatim.openstreetmap.org/search"
+        val formattedAddress = address.replace(" ", "+")
+        val url = "$baseUrl?q=$formattedAddress&format=json"
+
+        val request = okhttp3.Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                try {
+                    val jsonResponse = response.body?.string()
+                    val jsonArray = JSONArray(jsonResponse)
+                    if (jsonArray.length() > 0) {
+                        val firstResult = jsonArray.getJSONObject(0)
+                        val latitude = firstResult.getString("lat").toDouble()
+                        val longitude = firstResult.getString("lon").toDouble()
+                        callback(latitude, longitude)
+                    } else {
+                        errorCallback()
+                    }
+                } catch (e: JSONException) {
+                    errorCallback()
+                }
+            }
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                errorCallback()
+            }
+        })
+    }
+
+    override fun getAddressFromCoordinates(
+        context: Context,
+        latitude: Double,
+        longitude: Double,
+        callback: (String) -> Unit,
+        errorCallback: () -> Unit
+    ) {
+        val geocoder = Geocoder(context)
+        val location = android.location.Location("")
+        location.latitude = latitude
+        location.longitude = longitude
+
+        try {
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    val address = addresses[0]
+                    val city = address.locality ?: ""
+                    val street = address.thoroughfare ?: ""
+                    val fullAddress = "$city, $street"
+                    callback(fullAddress)
+                } else {
+                    errorCallback()
+                }
+            }
+        } catch (e: Exception) {
+            errorCallback()
+        }
     }
 }
