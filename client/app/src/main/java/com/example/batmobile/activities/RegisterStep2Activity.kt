@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import com.example.batmobile.R
 import org.osmdroid.config.Configuration
@@ -68,11 +69,23 @@ class RegisterStep2Activity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-    fun goToRegisterStep3Activity(view:View){
-        val intent: Intent = Intent(this, RegisterStep3Activity::class.java)
+//    fun goToRegisterStep3Activity(view:View){
+//        val intent: Intent = Intent(this, RegisterStep3Activity::class.java)
+//        startActivity(intent)
+//        finish()
+//    }
+    fun goToRegisterStep3Activity(view: View) {
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
+        val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
+
+        val intent = Intent(this, RegisterStep3Activity::class.java)
+
+        // Prebacujemo informaciju o selektovanom RadioButton-u na sledeću aktivnost
+        intent.putExtra("selectedOption", selectedRadioButton.text.toString())
+
         startActivity(intent)
-        finish()
-    }
+}
+
 
     fun setMap(){
         Configuration.getInstance().userAgentValue = packageName
