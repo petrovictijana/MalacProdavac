@@ -1,12 +1,14 @@
 package com.example.batmobile.activities
 
 import android.content.Intent
-import android.location.LocationManager
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.batmobile.R
 import org.osmdroid.config.Configuration
@@ -15,6 +17,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.FusedLocationProviderClient
 
 class RegisterStep2Activity : AppCompatActivity() {
 
@@ -27,6 +31,8 @@ class RegisterStep2Activity : AppCompatActivity() {
     private lateinit var dostavljacOptionsLayout: LinearLayout
 
     lateinit var mapView: MapView
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val REQUEST_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +66,16 @@ class RegisterStep2Activity : AppCompatActivity() {
         }
 
         mapView = findViewById(R.id.mapView)
-        setMap()
+        setInitMap()
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
+            getLocation()
+        } else {
+            // Ako nemate dozvolu, zatražite je od korisnika
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        }
     }
     fun goToRegisterActivity(view:View){
         val intent: Intent = Intent(this, RegisterActivity::class.java)
@@ -74,7 +88,7 @@ class RegisterStep2Activity : AppCompatActivity() {
         finish()
     }
 
-    fun setMap(){
+    fun setInitMap(){
         Configuration.getInstance().userAgentValue = packageName
         // Postavite parametre mape
         mapView.setTileSource(TileSourceFactory.MAPNIK)
@@ -84,15 +98,57 @@ class RegisterStep2Activity : AppCompatActivity() {
         // Postavite početnu tačku mape (npr. Beograd)
         val startPoint = GeoPoint(44.7866, 20.4489)
         mapView.controller.setCenter(startPoint)
-//
-//        // Dodajte pin na tačnu lokaciju
+
+    }
+
+    fun setMap(latitude:Double, longitude:Double){
+        val newPoint = GeoPoint(latitude, longitude)
+        mapView.controller.setCenter(newPoint)
+        mapView.controller.setZoom(13.0)
+        // Dodavanje pina na tacnu lokaciju
         val items = ArrayList<OverlayItem>()
-        val overlayItem = OverlayItem("Lokacija", "Lokacija domacinstva", startPoint)
+        val overlayItem = OverlayItem("Lokacija", "Lokacija domacinstva", newPoint)
         overlayItem.setMarker(ContextCompat.getDrawable(this, R.drawable.location_pin))
         items.add(overlayItem)
 
         val overlay = ItemizedIconOverlay<OverlayItem>(items, null, applicationContext)
         mapView.overlays.add(overlay)
-
     }
+
+    private fun getLocation() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        println("Lokacija " + latitude + ":" + longitude)
+                        setMap(latitude,longitude)
+                        Toast.makeText(this,"Vase koordinate: latitude: " + latitude + " longitude: " + longitude, Toast.LENGTH_LONG).show()
+                    } else {
+                        // Ako je lokacija null, znači da nije dostupna
+                        Toast.makeText(this,"Uključite lokacije na vašem uređaju, unesite ručno", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Neuspeh pri dobijanju lokacije
+                    println("Lokacija nije dostupna")
+                }
+        } else {
+            // Ako nemate dozvolu, zatražite je od korisnika
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Korisnik je odobrio pristup lokaciji
+                getLocation()
+            } else {
+                // Korisnik je odbio pristup lokaciji
+            }
+        }
+    }
+
 }
