@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
+
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         android:orientation="vertical"
         android:background="@drawable/border_background"
@@ -111,7 +111,7 @@
             tools:ignore="TextSizeCheck"
             android:layout_marginLeft="15dp"/>
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/user_nameKupac"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -131,7 +131,7 @@
             tools:ignore="TextSizeCheck"
             android:layout_marginLeft="15dp"/>
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/user_lastnameKupac"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -151,7 +151,7 @@
             tools:ignore="TextSizeCheck"
             android:layout_marginLeft="15dp"/>
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/user_usernameKupac"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -171,7 +171,7 @@
             tools:ignore="TextSizeCheck"
             android:layout_marginLeft="15dp"/>
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/user_emailKupac"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -197,9 +197,10 @@
             android:orientation="horizontal"
             android:layout_marginLeft="15dp">
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/user_passwordKupac"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:fontFamily="@font/inter"
                 android:text="**************"
                 android:textColor="@color/grey"

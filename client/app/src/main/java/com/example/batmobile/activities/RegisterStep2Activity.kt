@@ -13,6 +13,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.batmobile.R
 import com.example.batmobile.models.User
@@ -35,12 +36,24 @@ import java.nio.DoubleBuffer
 class RegisterStep2Activity : AppCompatActivity() {
 
     private lateinit var constraintLayout: LinearLayout
+
     private lateinit var kupacRadioButton: RadioButton
     private lateinit var prodavacRadioButton: RadioButton
     private lateinit var dostavljacRadioButton: RadioButton
+
     private lateinit var kupacOptionsLayout: LinearLayout
     private lateinit var prodavacOptionsLayout: LinearLayout
     private lateinit var dostavljacOptionsLayout: LinearLayout
+
+    private lateinit var kupacUserName: TextView
+    private lateinit var kupacEmail: TextView
+    private lateinit var dostavljacUserName: TextView
+    private lateinit var dostavljacEmail: TextView
+//    private lateinit var prodavacUserName: TextView
+//    private lateinit var prodavacEmail: TextView
+
+    private lateinit var user:User
+
     private lateinit var prodavac_pib: EditText
     private lateinit var prodavac_lokacija: EditText
     private lateinit var nastaviButton: Button
@@ -60,9 +73,7 @@ class RegisterStep2Activity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
         setInitMap()
 
-        val user = intent.getParcelableExtra<User>("user")
-
-        println(user)
+        user = intent.getParcelableExtra<User>("user")!!
 
         constraintLayout = findViewById<LinearLayout>(R.id.linearLayout2)
         kupacRadioButton = constraintLayout.findViewById<RadioButton>(R.id.Kupac)
@@ -72,6 +83,18 @@ class RegisterStep2Activity : AppCompatActivity() {
         kupacOptionsLayout = findViewById<LinearLayout>(R.id.kupacOptionsLayout)
         prodavacOptionsLayout = findViewById<LinearLayout>(R.id.prodavacOptionsLayout)
         dostavljacOptionsLayout = findViewById<LinearLayout>(R.id.dostavljacOptionsLayout)
+
+        kupacUserName = findViewById<TextView>(R.id.user_usernameKupac)
+        kupacEmail = findViewById<TextView>(R.id.user_emailKupac)
+        dostavljacUserName = findViewById<TextView>(R.id.user_usernameDostavljac)
+        dostavljacEmail = findViewById<TextView>(R.id.user_emailDostavljac)
+
+        if (user != null) {
+            kupacUserName.setText(user.username)
+            kupacEmail.setText(user.email)
+            dostavljacUserName.setText(user.username)
+            dostavljacEmail.setText(user.email)
+        }
 
         prodavac_pib = findViewById<EditText>(R.id.pib)
         prodavac_lokacija = findViewById<EditText>(R.id.lokacija)
@@ -99,9 +122,9 @@ class RegisterStep2Activity : AppCompatActivity() {
             dostavljacOptionsLayout.visibility=View.GONE
             prodavacOptionsLayout.visibility = View.VISIBLE
 
-            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
             nastaviButton.background = drawable
-            nastaviButton.isEnabled = true
+            nastaviButton.isEnabled = false
 
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -118,9 +141,9 @@ class RegisterStep2Activity : AppCompatActivity() {
             dostavljacOptionsLayout.visibility=View.VISIBLE
             prodavacOptionsLayout.visibility = View.GONE
 
-            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
             nastaviButton.background = drawable
-            nastaviButton.isEnabled = true
+            nastaviButton.isEnabled = false
         }
 
     }
@@ -130,15 +153,18 @@ class RegisterStep2Activity : AppCompatActivity() {
         finish()
     }
     fun goToRegisterStep3Activity(view: View) {
-        val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
-        val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
+        if(view.isEnabled) {
+            val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
+            val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
 
-        val intent = Intent(this, RegisterStep3Activity::class.java)
+            val intent = Intent(this, RegisterStep3Activity::class.java)
 
-        // Prebacujemo informaciju o selektovanom RadioButton-u na sledeću aktivnost
-        intent.putExtra("selectedOption", selectedRadioButton.text.toString())
+            // Prebacujemo informaciju o selektovanom RadioButton-u na sledeću aktivnost
+            intent.putExtra("user", user)
+            intent.putExtra("selectedOption", selectedRadioButton.text.toString())
 
-        startActivity(intent)
+            startActivity(intent)
+        }
 }
 
 
