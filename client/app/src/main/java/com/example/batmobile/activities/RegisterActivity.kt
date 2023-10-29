@@ -153,6 +153,11 @@ class RegisterActivity : AppCompatActivity() {
             btn_nastavi.setBackgroundResource(R.drawable.full_fill_button)
         }
     }
-
+    fun showPassword(view: View){
+        if(view.id.equals(R.id.eye_password))
+            Authenticate.showPassword(view, password)
+        else
+            Authenticate.showPassword(view, password_confirm)
+    }
 
 }

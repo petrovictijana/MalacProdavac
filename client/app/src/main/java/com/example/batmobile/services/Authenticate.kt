@@ -1,6 +1,10 @@
 package com.example.batmobile.services
 
+import android.text.InputType
+import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+import com.example.batmobile.R
 
 class Authenticate {
     companion object{
@@ -62,5 +66,25 @@ class Authenticate {
             }
             return true
         }
+
+        //  Ovo bi trebao neki servis da bude
+        fun showPassword(view: View, input: EditText){
+            val selectionStart = input.selectionStart
+            val selectionEnd = input.selectionEnd
+
+            val imageView = view as ImageView
+
+            if (input.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD){
+                input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                imageView.setImageResource(R.drawable.icons8_not_visible_96___)
+            }
+            else{
+                input.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                imageView.setImageResource(R.drawable.icons8_visible_96___)
+            }
+
+            input.setSelection(selectionStart, selectionEnd)
+        }
+
     }
 }
