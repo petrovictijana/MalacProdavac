@@ -7,7 +7,7 @@ import server.server.validation.UsernameValidation;
 import java.util.regex.Pattern;
 
 public class UsernameValidator implements ConstraintValidator<UsernameValidation, String> {
-    private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9]*$";
+    private static final String USERNAME_PATTERN = "^[a-zA-Z0-9]*$";
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
@@ -15,6 +15,6 @@ public class UsernameValidator implements ConstraintValidator<UsernameValidation
             return false;
         }
 
-        return Pattern.matches(PASSWORD_PATTERN, s);
+        return Pattern.matches(USERNAME_PATTERN, s);
     }
 }
