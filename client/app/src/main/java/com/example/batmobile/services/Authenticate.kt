@@ -1,7 +1,10 @@
 package com.example.batmobile.services
 
+import android.text.InputType
+import android.view.View
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.ImageView
+import com.example.batmobile.R
 
 class Authenticate {
     companion object{
@@ -13,21 +16,38 @@ class Authenticate {
                 return true
             return false
         }
-        private fun validateEmail(email:EditText): Boolean {
-            val email_text = email.text.toString()
+        fun validateEmail(email: String): String {
+            val email_text = email
             if(email_text.isEmpty()){
-                email.error = "Email cannot be empty"
-                return false
+                return "*Morate uneti email adresu"
             }
             else if(!regexEmailValidationPattern(email_text)){
-                email.error = "Please enter a valid email"
-                return false
+                return "*Uneta email adresa nije ispravna"
             }
             else {
-                email.error = null;
-                return true
+                return "true"
             }
         }
+
+        private fun regexPasswordValidationPattern(password:String): Boolean {
+            val regexString: String = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+\$"
+            val regex = Regex(regexString)
+            return regex.matches(password)
+        }
+
+        fun validatePassword(password: String): String {
+            val password_text = password
+            if(password_text.isEmpty()){
+                return "*Morate uneti neku šifru"
+            }
+            else if(!regexPasswordValidationPattern(password_text)){
+                return "*Šifra mora sadržati velika, mala slova i brojeve"
+            }
+            else {
+                return "true"
+            }
+        }
+
         private fun validateBasicInput(password: EditText): Boolean {
             val password_text = password.text.toString()
 
@@ -46,5 +66,25 @@ class Authenticate {
             }
             return true
         }
+
+        //  Ovo bi trebao neki servis da bude
+        fun showPassword(view: View, input: EditText){
+            val selectionStart = input.selectionStart
+            val selectionEnd = input.selectionEnd
+
+            val imageView = view as ImageView
+
+            if (input.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD){
+                input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                imageView.setImageResource(R.drawable.icons8_not_visible_96___)
+            }
+            else{
+                input.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                imageView.setImageResource(R.drawable.icons8_visible_96___)
+            }
+
+            input.setSelection(selectionStart, selectionEnd)
+        }
+
     }
 }
