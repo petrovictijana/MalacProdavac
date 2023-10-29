@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -58,12 +60,17 @@ class RegisterStep2Activity : AppCompatActivity() {
     private lateinit var prodavac_lokacija: EditText
     private lateinit var nastaviButton: Button
 
+//    Validne vrednosti latitude:[-90, 90] &  longitude:[-180, 180]
+    private var live_latitude:Double = -100.0
+    private var live_longitude:Double = 200.0
+
     lateinit var mapView: MapView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val REQUEST_CODE = 123
 
     lateinit var apiCall: ApiClient
 
+    private lateinit var vehicle: MutableMap<String, Boolean>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_step2)
@@ -71,9 +78,12 @@ class RegisterStep2Activity : AppCompatActivity() {
         apiCall = ApiClient(this)
 
         mapView = findViewById(R.id.mapView)
-        setInitMap()
+        if ((live_latitude >= -90.0 && live_latitude <= 90.0) || (live_longitude >= -180.0 && live_longitude <= 180.0)){ setMap(live_latitude, live_longitude)}
+        else setInitMap()
 
         user = intent.getParcelableExtra<User>("user")!!
+
+        vehicle = user.vehicle
 
         constraintLayout = findViewById<LinearLayout>(R.id.linearLayout2)
         kupacRadioButton = constraintLayout.findViewById<RadioButton>(R.id.Kupac)
@@ -122,10 +132,6 @@ class RegisterStep2Activity : AppCompatActivity() {
             dostavljacOptionsLayout.visibility=View.GONE
             prodavacOptionsLayout.visibility = View.VISIBLE
 
-            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
-            nastaviButton.background = drawable
-            nastaviButton.isEnabled = false
-
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
@@ -134,16 +140,27 @@ class RegisterStep2Activity : AppCompatActivity() {
                 // Ako nemate dozvolu, zatražite je od korisnika
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
             }
+            if ((live_latitude >= -90.0 && live_latitude <= 90.0) || (live_longitude >= -180.0 && live_longitude <= 180.0)){ setMap(live_latitude, live_longitude)}
+            else setInitMap()
+            validateNastaviButtonProdavac()
         }
+        prodavac_pib.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Implementacija pre promene teksta
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Implementacija tokom promene teksta
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                validateNastaviButtonProdavac() }
+        })
         dostavljacRadioButton.setOnClickListener{
             kupacOptionsLayout.visibility = View.GONE
             dostavljacOptionsLayout.visibility=View.VISIBLE
             prodavacOptionsLayout.visibility = View.GONE
-
-            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
-            nastaviButton.background = drawable
-            nastaviButton.isEnabled = false
+            validateNastaviButtonDostavljac()
         }
 
     }
@@ -158,11 +175,14 @@ class RegisterStep2Activity : AppCompatActivity() {
             val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
 
             val intent = Intent(this, RegisterStep3Activity::class.java)
-
-            // Prebacujemo informaciju o selektovanom RadioButton-u na sledeću aktivnost
+            user.vehicle = vehicle
+            user.pib = prodavac_pib.text.toString()
+            user.latitude = live_latitude
+            user.longitude = live_longitude
+            print(user)
+            intent.removeExtra("user")
             intent.putExtra("user", user)
             intent.putExtra("selectedOption", selectedRadioButton.text.toString())
-
             startActivity(intent)
         }
 }
@@ -183,6 +203,9 @@ class RegisterStep2Activity : AppCompatActivity() {
 
     fun setMap(latitude:Double, longitude:Double){
         val newPoint = GeoPoint(latitude, longitude)
+        live_latitude = latitude
+        live_longitude = longitude
+        validateNastaviButtonProdavac()
         mapView.controller.setCenter(newPoint)
         mapView.controller.setZoom(13.0)
         // Dodavanje pina na tacnu lokaciju
@@ -262,4 +285,53 @@ class RegisterStep2Activity : AppCompatActivity() {
                 println("Greška prilikom dobijanja adrese.")
             })
     }
+
+    private fun validateNastaviButtonDostavljac(){
+        if(vehicle["auto"]==false && vehicle["motocikl"]==false && vehicle["kombi"]==false && vehicle["kamion"]==false){
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = false
+        }
+        else{
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = true
+        }
+    }
+    private fun validateNastaviButtonProdavac(){
+        if(prodavac_pib.text.length == 0) {
+            //tada nije dozvoljeno dalje
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = false
+        }
+        else if (!(live_latitude >= -90.0 && live_latitude <= 90.0) || !(live_longitude >= -180.0 && live_longitude <= 180.0)){
+            //ni onda nije dozvoljeno
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button_disabled)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = false
+        }
+        else{
+            // sada je samo dozvoljeno
+            val drawable = ContextCompat.getDrawable(this, R.drawable.full_fill_button)
+            nastaviButton.background = drawable
+            nastaviButton.isEnabled = true
+        }
+    }
+
+    private fun setVehicleInformation(type:String, view:View){
+        if(vehicle[type]==true)     {vehicle[type]=false; view.setBackgroundResource(R.drawable.border_background)}
+        else if(vehicle[type]==false)    {vehicle[type]=true; view.setBackgroundResource(R.drawable.border_background_orange)}
+        validateNastaviButtonDostavljac()
+    }
+
+    fun setVehicle(view:View){
+        when(view.id){
+            R.id.auto ->        {setVehicleInformation("auto", view)}
+            R.id.motocikl ->    {setVehicleInformation("motocikl", view)}
+            R.id.kombi ->       {setVehicleInformation("kombi", view)}
+            R.id.kamion ->      {setVehicleInformation("kamion", view)}
+        }
+    }
+
 }

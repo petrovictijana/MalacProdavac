@@ -63,28 +63,9 @@ class LoginActivity : AppCompatActivity() {
         button.background = shapeDrawable
     }
     fun onEyeIconClick(view: View){
-        this!!.input_password?.let { showPassword(view, it) }
+        Authenticate.showPassword(view, input_password)
     }
-
-//  Ovo bi trebao neki servis da bude
-    fun showPassword(view: View, input: EditText){
-        val selectionStart = this.input_password!!.selectionStart
-        val selectionEnd = this.input_password!!.selectionEnd
-
-        val imageView = view as ImageView
-
-        if (input.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD){
-            input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            imageView.setImageResource(R.drawable.icons8_not_visible_96___)
-        }
-        else{
-            input.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            imageView.setImageResource(R.drawable.icons8_visible_96___)
-        }
-
-        input.setSelection(selectionStart, selectionEnd)
-    }
-
+    
 //    Send Login
     fun sendLoginRequest(){
         val response = Authenticate.authenticateLogin(input_username, input_password)

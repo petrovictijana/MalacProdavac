@@ -8,7 +8,11 @@ data class User(
     val lastname: String,
     val username: String,
     val email: String,
-    val password: String
+    val password: String,
+    var vehicle: MutableMap<String, Boolean> = mutableMapOf("auto" to false, "motocikl" to false, "kombi" to false, "kamion" to false),
+    var pib: String? = null,
+    var latitude: Double? = null,
+    var longitude: Double? = null
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -16,7 +20,14 @@ data class User(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!
-    )
+    ){
+        val vehicleData = mutableMapOf<String, Boolean>()
+        parcel.readMap(vehicleData, javaClass.classLoader)
+        vehicle = vehicleData
+        pib = parcel.readString()
+        latitude = parcel.readDouble()
+        longitude = parcel.readDouble()
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
@@ -24,6 +35,10 @@ data class User(
         parcel.writeString(username)
         parcel.writeString(email)
         parcel.writeString(password)
+        parcel.writeMap(vehicle)
+        parcel.writeString(pib)
+        parcel.writeDouble(latitude ?: -100.0)
+        parcel.writeDouble(longitude ?: 200.0)
     }
 
     override fun describeContents(): Int {
