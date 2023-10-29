@@ -26,7 +26,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     DriversLicensesRepository driversLicensesRepository;
     @Autowired
     DelivererRepository delivererRepository;
-
     @Autowired
     RoleRepository roleRepository;
 
@@ -63,7 +62,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .username(userRegistrationRequest.getUsername())
                 .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
-                .picture(userRegistrationRequest.getPicture())
+                .picture(userRegistrationRequest.getImage())
                 .role(roleRepository.findById(userRegistrationRequest.getRoleId()).get())
                 .build();
 
@@ -90,7 +89,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
             for (Long licenceId: userRegistrationRequest.getLicenceCategories()) {
                 DriversLicenses driversLicense = new DriversLicenses(
-                        createdDeliverer.getUser().getUserId(),
+                        createdDeliverer.getId(),
                         licenceId
                 );
 
