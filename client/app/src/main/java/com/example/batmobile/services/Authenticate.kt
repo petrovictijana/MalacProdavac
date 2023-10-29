@@ -1,7 +1,6 @@
 package com.example.batmobile.services
 
 import android.widget.EditText
-import android.widget.Toast
 
 class Authenticate {
     companion object{
@@ -13,21 +12,38 @@ class Authenticate {
                 return true
             return false
         }
-        private fun validateEmail(email:EditText): Boolean {
-            val email_text = email.text.toString()
+        fun validateEmail(email: String): String {
+            val email_text = email
             if(email_text.isEmpty()){
-                email.error = "Email cannot be empty"
-                return false
+                return "*Morate uneti email adresu"
             }
             else if(!regexEmailValidationPattern(email_text)){
-                email.error = "Please enter a valid email"
-                return false
+                return "*Uneta email adresa nije ispravna"
             }
             else {
-                email.error = null;
-                return true
+                return "true"
             }
         }
+
+        private fun regexPasswordValidationPattern(password:String): Boolean {
+            val regexString: String = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+\$"
+            val regex = Regex(regexString)
+            return regex.matches(password)
+        }
+
+        fun validatePassword(password: String): String {
+            val password_text = password
+            if(password_text.isEmpty()){
+                return "*Morate uneti neku šifru"
+            }
+            else if(!regexPasswordValidationPattern(password_text)){
+                return "*Šifra mora sadržati velika, mala slova i brojeve"
+            }
+            else {
+                return "true"
+            }
+        }
+
         private fun validateBasicInput(password: EditText): Boolean {
             val password_text = password.text.toString()
 

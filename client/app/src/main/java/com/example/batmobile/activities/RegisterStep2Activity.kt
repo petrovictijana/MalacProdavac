@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
 import com.example.batmobile.R
+import com.example.batmobile.models.User
 import com.example.batmobile.network.ApiClient
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -58,6 +59,10 @@ class RegisterStep2Activity : AppCompatActivity() {
 
         mapView = findViewById(R.id.mapView)
         setInitMap()
+
+        val user = intent.getParcelableExtra<User>("user")
+
+        println(user)
 
         constraintLayout = findViewById<LinearLayout>(R.id.linearLayout2)
         kupacRadioButton = constraintLayout.findViewById<RadioButton>(R.id.Kupac)
@@ -124,11 +129,6 @@ class RegisterStep2Activity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-//    fun goToRegisterStep3Activity(view:View){
-//        val intent: Intent = Intent(this, RegisterStep3Activity::class.java)
-//        startActivity(intent)
-//        finish()
-//    }
     fun goToRegisterStep3Activity(view: View) {
         val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
         val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
