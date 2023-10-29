@@ -74,7 +74,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         //Ukoliko je korisnik uspesno kreiran treba ga dodeliti u role
-        if(userRegistrationRequest.getRoleId() == Roles.DELIVERY_DRIVER.ordinal()){
+        if(userRegistrationRequest.getRoleId() == (Roles.DELIVERER.ordinal() + 1)){
             //Ukoliko je dostavljac
             //Dodavanje dostavljaca
             Deliverer deliverer = Deliverer.builder()
@@ -98,7 +98,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
 
-        if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
+        if(userRegistrationRequest.getRoleId() == (Roles.SELLER.ordinal() + 1)){
             //Dodati u tabelu sellers
             Seller seller = Seller.builder()
                             .user(createdUser)

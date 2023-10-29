@@ -41,6 +41,7 @@ public class User{
     @Email(message = "Morate uneti validnu email adresu", regexp = ".+@.+\\..+")
     private String email;
 
+    @Lob
     private String picture;
 
     @ManyToOne
