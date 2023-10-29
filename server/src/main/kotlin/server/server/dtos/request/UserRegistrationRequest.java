@@ -1,5 +1,6 @@
 package server.server.dtos.request;
 
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,8 @@ public class UserRegistrationRequest {
     private String username;
     private String password;
     private String email;
-    private String picture;
+    @Lob
+    private String image;
     private int roleId;
     //Za dostavljaca
     private ArrayList<Long> licenceCategories;

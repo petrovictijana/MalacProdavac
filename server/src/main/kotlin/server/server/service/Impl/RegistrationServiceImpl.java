@@ -63,7 +63,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .username(userRegistrationRequest.getUsername())
                 .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
-                .picture(userRegistrationRequest.getPicture())
+                .picture(userRegistrationRequest.getImage())
                 .role_id(userRegistrationRequest.getRoleId())
                 .build();
 
