@@ -13,10 +13,7 @@ import server.server.models.Deliverer;
 import server.server.models.DriversLicenses;
 import server.server.models.Seller;
 import server.server.models.User;
-import server.server.repository.DelivererRepository;
-import server.server.repository.DriversLicensesRepository;
-import server.server.repository.SellerRepository;
-import server.server.repository.UserRepository;
+import server.server.repository.*;
 import server.server.service.RegistrationService;
 
 @Service
@@ -29,6 +26,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     DriversLicensesRepository driversLicensesRepository;
     @Autowired
     DelivererRepository delivererRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public ResponseEntity<EmailUsernameAvailabilityResponse> checkNewUserData(UserRegistrationRequest userRegistrationRequest) {
@@ -64,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
                 .picture(userRegistrationRequest.getPicture())
-                .role_id(userRegistrationRequest.getRoleId())
+                .role(roleRepository.findById(userRegistrationRequest.getRoleId()).get())
                 .build();
 
         //Kreiran nov korisnik
@@ -79,7 +79,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             //Ukoliko je dostavljac
             //Dodavanje dostavljaca
             Deliverer deliverer = Deliverer.builder()
-                    .delivererId(createdUser.getUserId())
+                    .user(createdUser)
                     .location(userRegistrationRequest.getLocation())
                     .build();
             Deliverer createdDeliverer = delivererRepository.save(deliverer);
@@ -90,7 +90,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
             for (Long licenceId: userRegistrationRequest.getLicenceCategories()) {
                 DriversLicenses driversLicense = new DriversLicenses(
-                        createdDeliverer.getDelivererId(),
+                        createdDeliverer.getUser().getUserId(),
                         licenceId
                 );
 
@@ -102,7 +102,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
             //Dodati u tabelu sellers
             Seller seller = Seller.builder()
-                            .sellerId(createdUser.getUserId())
+                            .user(createdUser)
                             .pib(userRegistrationRequest.getPib())
                             .address(userRegistrationRequest.getLocation())
                             .build();

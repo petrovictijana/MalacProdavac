@@ -43,20 +43,8 @@ public class User{
 
     private String picture;
 
-    @Column(name = "role_id")
-    private long role_id;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", picture='" + picture + '\'' +
-                ", role_id=" + role_id +
-                '}';
-    }
 }

@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     LoginService loginService;
 
-    @GetMapping("/registration/step1")
+    @PostMapping ("/registration/step1")
     public ResponseEntity<?> checkNewUserData(
             @RequestBody UserRegistrationRequest userRegistrationRequest
     ){
@@ -30,7 +30,7 @@ public class UserController {
         return registrationService.createNewUser(userRegistrationRequest);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> loginUser(
             @RequestBody UserLoginRequest userLoginRequest
             ){

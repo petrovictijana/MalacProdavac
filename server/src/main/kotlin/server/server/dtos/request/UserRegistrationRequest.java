@@ -18,7 +18,7 @@ public class UserRegistrationRequest {
     private String password;
     private String email;
     private String picture;
-    private int roleId;
+    private Long roleId;
     //Za dostavljaca
     private ArrayList<Long> licenceCategories;
     //Za prodavca

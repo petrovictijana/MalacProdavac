@@ -8,7 +8,7 @@ INSERT IGNORE INTO category (category_id,name) VALUES (3,'Mlecni prozivodi');
 INSERT IGNORE INTO category (category_id,name) VALUES (4,'Voce');
 INSERT IGNORE INTO category (category_id,name) VALUES (5,'Povrce');
 
-INSERT IGNORE INTO deliverer (deliverer_id,location,latitude,longitude) VALUES (2,'Kragujevac',20.90,44.02);
+INSERT IGNORE INTO deliverers (deliverer_id,location,latitude,longitude) VALUES (2,'Kragujevac',20.90,44.02);
 
 INSERT IGNORE INTO measurement (measurement_id,name) VALUES (1,'bottle');
 INSERT IGNORE INTO measurement (measurement_id,name) VALUES (2,'liter');
@@ -19,15 +19,6 @@ INSERT IGNORE INTO users (user_id,name,surname,username,password,email,picture,r
 INSERT IGNORE INTO users (user_id,name,surname,username,password,email,picture,role_id) VALUES (2,'Pera','Peric','Peki034','Peki034','pekan037@gmail.com','bbbb',2);
 INSERT IGNORE INTO users (user_id,name,surname,username,password,email,picture,role_id) VALUES (3,'Aleksandra','Jankovic','aleksaleks','Grosnica04','saska.jankovic19@gmail.com','tttt',3);
 
-INSERT IGNORE INTO seller (seller_id,pib,address,latitude,longitude) VALUES (3,'103920327','Crkvinska 2',20.87, 43.94);
-
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category,id_measurement,description) VALUES (1,3,'jabuke','',250,4,4,'');
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category,id_measurement,description) VALUES (2,3,'sljive','',150,4,4,'');
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category, id_measurement,description) VALUES (3,3,'jagode','',450,4,4,'');
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category, id_measurement,description) VALUES (4,3,'mleko','',150,3,2,'');
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category, id_measurement,description) VALUES (5,3,'jaja','',300,2,3,'');
-INSERT IGNORE INTO product (product_id,seller_id,product_name,picture,price,id_category, id_measurement,description) VALUES (6,3,'sir','',500,3,2,'');
-
-
+INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (3,'103920327','Crkvinska 2',20.87, 43.94);
 
 
