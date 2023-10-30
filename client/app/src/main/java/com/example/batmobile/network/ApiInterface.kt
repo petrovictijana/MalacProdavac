@@ -11,7 +11,7 @@ interface ApiInterface {
                                   onError:      (VolleyError) -> Unit)
     fun sendPostRequestWithJSONObjectWithJsonResponse(url:String,
                                       jsonObject:   JSONObject,
-                                      onSuccess:    (String) ->Unit,
+                                      onSuccess:    (JSONObject) ->Unit,
                                       onError:      (VolleyError) -> Unit)
     fun sendPostRequestWithJSONObjectWithStringResponse(
         url: String,

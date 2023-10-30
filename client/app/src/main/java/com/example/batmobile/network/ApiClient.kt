@@ -46,14 +46,14 @@ class ApiClient(private val context: Context): ApiInterface {
     override fun sendPostRequestWithJSONObjectWithJsonResponse(
         url: String,
         jsonObject: JSONObject,
-        onSuccess: (String) -> Unit,
+        onSuccess: (JSONObject) -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST,
             url,
             jsonObject,
-            {response -> onSuccess(response.toString())},
+            {response -> onSuccess(response)},
             {error -> onError(error)}
         )
         queue.add(jsonObjectRequest)

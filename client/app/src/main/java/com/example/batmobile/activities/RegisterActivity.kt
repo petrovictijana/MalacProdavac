@@ -8,9 +8,13 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.example.batmobile.R
 import com.example.batmobile.services.Authenticate
 import com.example.batmobile.models.User
+import com.example.batmobile.network.ApiClient
+import com.example.batmobile.network.Config
+import org.json.JSONObject
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -37,9 +41,13 @@ class RegisterActivity : AppCompatActivity() {
     var flagPassword: Boolean = false
     var flagPassword_confirm: Boolean = false
 
+    lateinit var apiClient: ApiClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        apiClient = ApiClient(this)
 
         name =                      findViewById<EditText>(R.id.name)
         lastname =                  findViewById<EditText>(R.id.lastname)
@@ -63,14 +71,14 @@ class RegisterActivity : AppCompatActivity() {
         lastname.setOnFocusChangeListener   { _, hasFocus -> if (!hasFocus)                                     { validateIsHaveInput(lastname,"lastname", error_lastname) } }
         lastname.setOnEditorActionListener  { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)     { validateIsHaveInput(lastname,"lastname", error_lastname) }; false }
 
-        username.setOnFocusChangeListener   { _, hasFocus -> if (!hasFocus)                                     { validateIsHaveInput(username,"username", error_username) } }
-        username.setOnEditorActionListener  { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)     { validateIsHaveInput(username,"username", error_username) }; false }
+        username.setOnFocusChangeListener   { _, hasFocus   ->      checkExisting("username",username.text.toString());    if (!hasFocus){ validateIsHaveInput(username,"username", error_username) } }
+        username.setOnEditorActionListener  { _, actionId, _ ->     checkExisting("username",username.text.toString());   if (actionId == EditorInfo.IME_ACTION_DONE)     { validateIsHaveInput(username,"username", error_username) }; false }
 
-        email.setOnFocusChangeListener  { _, hasFocus -> if (!hasFocus)                                   { validateEmail(email, error_email) } }
-        email.setOnEditorActionListener { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)  { validateEmail(email, error_email) }; false }
+        email.setOnFocusChangeListener  { _, hasFocus    ->     checkExisting("email",email.text.toString());        if (!hasFocus) { validateEmail(email, error_email)  } }
+        email.setOnEditorActionListener { _, actionId, _ ->     checkExisting("email",email.text.toString()) ;       if (actionId == EditorInfo.IME_ACTION_DONE)  { validateEmail(email, error_email) }; false }
 
-        password.setOnFocusChangeListener   { _, hasFocus -> if (!hasFocus)                                   { validatePassword(password, error_password) } }
-        password.setOnEditorActionListener  { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)  { validateEmail(password, error_password) }; false }
+        password.setOnFocusChangeListener   { _, hasFocus ->    if (!hasFocus)                                      { validatePassword(password, error_password) } }
+        password.setOnEditorActionListener  { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)         { validateEmail(password, error_password) }; false }
 
         password_confirm.setOnFocusChangeListener   { _, hasFocus -> if (!hasFocus)                                   { validateConfirmPassword(password, password_confirm, error_password_confirm) } }
         password_confirm.setOnEditorActionListener  { _, actionId, _ -> if (actionId == EditorInfo.IME_ACTION_DONE)  { validateConfirmPassword(password, password_confirm, error_password_confirm) }; false }
@@ -158,6 +166,56 @@ class RegisterActivity : AppCompatActivity() {
             Authenticate.showPassword(view, password)
         else
             Authenticate.showPassword(view, password_confirm)
+    }
+
+    fun checkExisting(type:String, value:String){
+        val jsonObject: JSONObject = JSONObject()
+
+        jsonObject.put("username", "")
+        jsonObject.put("email", "")
+
+        if(type.equals("username"))
+            jsonObject.put("username", value)
+        if(type.equals("email"))
+            jsonObject.put("email", value)
+
+        var url:String = Config.ip_address+":"+ Config.port + "/registration/step1"
+        println(url)
+        println("SALJEM"+jsonObject)
+
+        apiClient.sendPostRequestWithJSONObjectWithJsonResponse(
+            url,
+            jsonObject,
+            { response ->
+                println(response)
+                when (type) {
+                    "username"->{   flagUsername = true;
+                                    error_username.setText("");
+                                    error_username.visibility = View.INVISIBLE
+                    }
+                    "email" -> {
+                        flagEmail = true;
+                        error_email.setText("");
+                        error_email.visibility = View.INVISIBLE
+                    }
+                }
+            },
+            { error ->
+                when (type) {
+                    "username"->{   flagUsername = false;
+                                    error_username.setText("*Korisničko ime se već koristi");
+                                    error_username.visibility = View.VISIBLE
+                                }
+                    "email" -> {
+                        flagEmail = false;
+                        error_email.setText("*Ovaj email se već koristi");
+                        error_email.visibility = View.VISIBLE
+                    }
+                }
+            }
+        )
+
+
     }
 
 }
