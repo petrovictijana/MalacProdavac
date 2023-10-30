@@ -73,26 +73,23 @@ class LoginActivity : AppCompatActivity() {
         {
             val apiCall: ApiClient = ApiClient(this)
 
-            var url:String = Config.ip_address+":"+Config.port + "/api/v1/user/login"
-            println(url)
+            var url:String = Config.ip_address+":"+Config.port + "/login"
             val jsonObject: JSONObject = JSONObject()
-            jsonObject.put("email",input_username.text.toString())
+            jsonObject.put("username",input_username.text.toString())
             jsonObject.put("password",input_password.text.toString())
             println(jsonObject)
-            apiCall.sendPostRequestWithJSONObject(
+            apiCall.sendPostRequestWithJSONObjectWithStringResponse(
                 url,
                 jsonObject,
-                {
-                    response->
-                        println(response)
-                        Toast.makeText(this, "Uspesno ste se ulogovali", Toast.LENGTH_LONG).show()
+                { response -> println(response)
+                    Toast.makeText(this, "Uspesno ste se ulogovali", Toast.LENGTH_LONG).show()
                 },
-                {
-                    error->
-                        Toast.makeText(this, "NisteSeUlogovali", Toast.LENGTH_LONG).show()
-                        error.printStackTrace()
-                        println(error.message)
-            })
+                { error ->
+                    Toast.makeText(this, "Niste se ulogovali", Toast.LENGTH_LONG).show()
+                    error.printStackTrace()
+                    println(error.message)
+                }
+            )
         }
     }
 }

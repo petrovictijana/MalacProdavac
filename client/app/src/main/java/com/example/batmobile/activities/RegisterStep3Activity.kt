@@ -4,19 +4,27 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.batmobile.R
 import com.example.batmobile.models.User
+import com.example.batmobile.network.ApiClient
+import com.example.batmobile.network.Config
+import org.json.JSONArray
+import org.json.JSONObject
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.OverlayItem
 
 class RegisterStep3Activity : AppCompatActivity() {
+
+    private lateinit var selectedOption:String
 
     private lateinit var name: TextView;
     private lateinit var lastname: TextView;
@@ -33,13 +41,17 @@ class RegisterStep3Activity : AppCompatActivity() {
 
     private lateinit var user: User
 
+    private lateinit var apiCall: ApiClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_step3)
 
         user = intent.getParcelableExtra<User>("user")!!
 
-        val selectedOption = intent.getStringExtra("selectedOption")
+        selectedOption = intent.getStringExtra("selectedOption").toString()
+
+        apiCall = ApiClient(this)
 
         when (selectedOption) {
             "Kupac" -> {
@@ -127,4 +139,60 @@ class RegisterStep3Activity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    fun getUserVehicle():JSONArray{
+        val licenceCategories = JSONArray()
+        if(user.vehicle["auto"]==true)
+            licenceCategories.put(1)
+        if(user.vehicle["motocikl"]==true)
+            licenceCategories.put(2)
+        if(user.vehicle["kombi"]==true)
+            licenceCategories.put(3)
+        if(user.vehicle["kamion"]==true)
+            licenceCategories.put(4)
+        return licenceCategories
+    }
+
+    fun sendRequestForRegistration(view: View){
+        val jsonObject: JSONObject = JSONObject()
+        jsonObject.put("name",user.name)
+        jsonObject.put("surname",user.lastname)
+        jsonObject.put("username",user.username)
+        jsonObject.put("password",user.password)
+        jsonObject.put("email",user.email)
+        jsonObject.put("picture","slika.png")
+        when(selectedOption){
+            "Kupac" -> {
+                jsonObject.put("roleId",1)
+            }
+            "Dostavljač" -> {
+                jsonObject.put("roleId",2)
+                jsonObject.put("licenceCategories", getUserVehicle())
+            }
+            "Mali prodavac" -> {
+                jsonObject.put("roleId",3)
+                jsonObject.put("pib", user.pib)
+                jsonObject.put("location", user.latitude.toString() + " " + user.longitude.toString())
+            }
+        }
+
+        println(jsonObject)
+        var url:String = Config.ip_address+":"+ Config.port + "/registration"
+        println(url)
+        apiCall.sendPostRequestWithJSONObjectWithStringResponse(
+            url,
+            jsonObject,
+            { response -> println(response)
+                Toast.makeText(this, response, Toast.LENGTH_LONG).show()
+            },
+            { error ->
+                Toast.makeText(this, "korisnik je vec registrovan", Toast.LENGTH_LONG).show()
+                error.printStackTrace()
+                println(error.message)
+            }
+        )
+
+
+    }
+
 }

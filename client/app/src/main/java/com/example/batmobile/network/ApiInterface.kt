@@ -9,10 +9,18 @@ interface ApiInterface {
                                   params:       Map<String,String>,
                                   onSuccess:    (String) ->Unit,
                                   onError:      (VolleyError) -> Unit)
-    fun sendPostRequestWithJSONObject(url:String,
+    fun sendPostRequestWithJSONObjectWithJsonResponse(url:String,
                                       jsonObject:   JSONObject,
-                                      onSuccess:    (JSONObject) ->Unit,
+                                      onSuccess:    (String) ->Unit,
                                       onError:      (VolleyError) -> Unit)
+    fun sendPostRequestWithJSONObjectWithStringResponse(
+        url: String,
+        jsonObject: JSONObject,
+        onSuccess: (String) -> Unit,
+        onError: (VolleyError) -> Unit
+    )
+
+
     fun getCoordinatesForAddress(address:       String,
                                  callback:      (Double, Double) -> Unit,
                                  errorCallback: () -> Unit)

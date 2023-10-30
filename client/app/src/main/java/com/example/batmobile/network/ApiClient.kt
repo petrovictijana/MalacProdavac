@@ -14,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.nio.charset.Charset
 
 class ApiClient(private val context: Context): ApiInterface {
 
@@ -42,20 +43,52 @@ class ApiClient(private val context: Context): ApiInterface {
         queue.add(stringRequest)
     }
 
-    override fun sendPostRequestWithJSONObject(
+    override fun sendPostRequestWithJSONObjectWithJsonResponse(
         url: String,
         jsonObject: JSONObject,
-        onSuccess: (JSONObject) -> Unit,
+        onSuccess: (String) -> Unit,
         onError: (VolleyError) -> Unit
     ) {
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST,
             url,
             jsonObject,
-            {response -> onSuccess(response)},
+            {response -> onSuccess(response.toString())},
             {error -> onError(error)}
         )
         queue.add(jsonObjectRequest)
+    }
+
+    override fun sendPostRequestWithJSONObjectWithStringResponse(
+        url: String,
+        jsonObject: JSONObject,
+        onSuccess: (String) -> Unit,
+        onError: (VolleyError) -> Unit
+    ) {
+        val request = object : StringRequest(
+            Method.POST,
+            url,
+            Response.Listener<String> { response -> println(response); onSuccess(response) },
+            Response.ErrorListener { error -> onError(error) }
+        ) {
+            override fun getBodyContentType(): String {
+                // Postavite Content-Type zaglavlje na application/json
+                return "application/json"
+            }
+
+            override fun getBody(): ByteArray {
+                // Postavite JSON podatke kao body zahteva
+                return jsonObject.toString().toByteArray(Charset.forName("UTF-8"))
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                // Postavite zaglavlja ako je potrebno (na primer, token za autentifikaciju)
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                return headers
+            }
+        }
+        queue.add(request)
     }
 
     override fun getCoordinatesForAddress(
