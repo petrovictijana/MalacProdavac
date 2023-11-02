@@ -1,6 +1,5 @@
-package com.example.batmobile
+package com.example.batmobile.fragments
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
@@ -23,8 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import com.example.batmobile.activities.RegisterActivity
-import com.example.batmobile.activities.RegisterStep3Activity
+import com.example.batmobile.R
+import com.example.batmobile.viewModels.UserViewModel
 import com.example.batmobile.models.User
 import com.example.batmobile.network.ApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -205,30 +204,6 @@ class RegisterFragment_step2 : Fragment() {
         return view
     }
 
-//    fun goToRegisterActivity(view:View){
-//        val intent: Intent = Intent(this, RegisterActivity::class.java)
-//        startActivity(intent)
-//        finish()
-//    }
-//    fun goToRegisterStep3Activity(view: View) {
-//        if(view.isEnabled) {
-//            val radioGroup = findViewById<RadioGroup>(R.id.radioGroup)
-//            val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
-//
-//            val intent = Intent(this, RegisterStep3Activity::class.java)
-//            user.vehicle = vehicle
-//            user.pib = prodavac_pib.text.toString()
-//            user.latitude = live_latitude
-//            user.longitude = live_longitude
-//            print(user)
-//            intent.removeExtra("user")
-//            intent.putExtra("user", user)
-//            intent.putExtra("selectedOption", selectedRadioButton.text.toString())
-//            startActivity(intent)
-//        }
-//    }
-
-
     fun setInitMap(){
         Configuration.getInstance().userAgentValue = requireActivity().packageName
         // Postavite parametre mape
@@ -329,7 +304,9 @@ class RegisterFragment_step2 : Fragment() {
 
     private fun validateNastaviButtonDostavljac(){
         if(vehicle["auto"]==false && vehicle["motocikl"]==false && vehicle["kombi"]==false && vehicle["kamion"]==false){
-            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.full_fill_button_disabled)
+            val drawable = ContextCompat.getDrawable(requireContext(),
+                R.drawable.full_fill_button_disabled
+            )
             nastaviButton.background = drawable
             nastaviButton.isEnabled = false
         }
@@ -342,13 +319,17 @@ class RegisterFragment_step2 : Fragment() {
     private fun validateNastaviButtonProdavac(){
         if(prodavac_pib.text.length == 0) {
             //tada nije dozvoljeno dalje
-            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.full_fill_button_disabled)
+            val drawable = ContextCompat.getDrawable(requireContext(),
+                R.drawable.full_fill_button_disabled
+            )
             nastaviButton.background = drawable
             nastaviButton.isEnabled = false
         }
         else if (!(live_latitude >= -90.0 && live_latitude <= 90.0) || !(live_longitude >= -180.0 && live_longitude <= 180.0)){
             //ni onda nije dozvoljeno
-            val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.full_fill_button_disabled)
+            val drawable = ContextCompat.getDrawable(requireContext(),
+                R.drawable.full_fill_button_disabled
+            )
             nastaviButton.background = drawable
             nastaviButton.isEnabled = false
         }

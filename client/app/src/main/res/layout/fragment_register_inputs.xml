@@ -244,8 +244,6 @@
                 android:textColor="@color/grey"
                 android:textSize="12dp"
                 tools:ignore="TextSizeCheck" />
-
-            <!--            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -282,8 +280,6 @@
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
                     />
             </LinearLayout>
-            <!--            -->
-
             <TextView
                 android:id="@+id/error_password"
                 android:layout_width="match_parent"
@@ -306,9 +302,6 @@
                 android:textColor="@color/grey"
                 android:textSize="12dp"
                 tools:ignore="TextSizeCheck" />
-
-            <!--            -->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
@@ -345,9 +338,6 @@
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
                     />
             </LinearLayout>
-
-            <!--            -->
-
             <TextView
                 android:id="@+id/error_password_confirm"
                 android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.batmobile
+package com.example.batmobile.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,6 +16,8 @@ import com.example.batmobile.network.Config
 import com.example.batmobile.services.Authenticate
 import org.json.JSONObject
 import androidx.fragment.app.activityViewModels
+import com.example.batmobile.R
+import com.example.batmobile.viewModels.UserViewModel
 import com.example.batmobile.models.User
 
 class RegisterFragment_inputs : Fragment() {

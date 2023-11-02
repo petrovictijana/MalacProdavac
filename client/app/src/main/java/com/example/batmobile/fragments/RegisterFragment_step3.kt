@@ -1,6 +1,5 @@
-package com.example.batmobile
+package com.example.batmobile.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,7 +14,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import com.example.batmobile.activities.RegisterStep2Activity
+import com.example.batmobile.R
+import com.example.batmobile.viewModels.UserViewModel
 import com.example.batmobile.models.User
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
@@ -165,12 +165,6 @@ class RegisterFragment_step3 : Fragment() {
         mapView.overlays.clear()
         mapView.overlays.add(overlay)
     }
-
-//    fun goToRegisterstep2Activity(view: View){
-//        val intent: Intent = Intent(this, RegisterStep2Activity::class.java)
-//        startActivity(intent)
-//        finish()
-//    }
 
     fun getUserVehicle(): JSONArray {
         val licenceCategories = JSONArray()

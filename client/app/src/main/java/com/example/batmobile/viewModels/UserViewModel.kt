@@ -1,4 +1,4 @@
-package com.example.batmobile
+package com.example.batmobile.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.example.batmobile.models.User
