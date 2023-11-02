@@ -16,8 +16,10 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
 
-    @Column(name = "seller_id")
-    private int sellerId;
+    @ManyToOne
+    @JoinColumn(name="seller_id")
+    private Seller seller;
+
 
     @Column(name="product_name")
     private String productName;
