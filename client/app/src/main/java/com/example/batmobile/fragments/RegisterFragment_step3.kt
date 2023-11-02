@@ -32,11 +32,13 @@ class RegisterFragment_step3 : Fragment() {
 
     private lateinit var selectedOption:String
 
-    private lateinit var name: TextView;
-    private lateinit var lastname: TextView;
-    private lateinit var username: TextView;
-    private lateinit var email: TextView;
-    private lateinit var password: TextView;
+    private lateinit var name: TextView
+    private lateinit var lastname: TextView
+    private lateinit var username: TextView
+    private lateinit var email: TextView
+    private lateinit var password: TextView
+
+    private lateinit var eye: ImageView
 
     private lateinit var vehicle_auto: FrameLayout
     private lateinit var vehicle_motocikl: FrameLayout
@@ -44,6 +46,7 @@ class RegisterFragment_step3 : Fragment() {
     private lateinit var vehicle_kamion: FrameLayout
 
     private lateinit var mapView: MapView
+    private lateinit var pib_prodavac: TextView
 
     private lateinit var btn_registruj_se: Button
 
@@ -85,6 +88,8 @@ class RegisterFragment_step3 : Fragment() {
                 email =     view.findViewById<TextView>(R.id.user_emailKupac)
                 password =  view.findViewById<TextView>(R.id.user_passwordKupac)
                 btn_registruj_se = view.findViewById<Button>(R.id.registruj_seKupac)
+                eye = view.findViewById<ImageView>(R.id.password_eye)
+                eye.setOnClickListener{setPassword()}
                 setPreview()
             }
             "Dostavljač" -> {
@@ -101,6 +106,8 @@ class RegisterFragment_step3 : Fragment() {
                 vehicle_kombi = view.findViewById<FrameLayout>(R.id.kombi)
                 vehicle_kamion = view.findViewById<FrameLayout>(R.id.kamion)
                 btn_registruj_se = view.findViewById<Button>(R.id.registruj_seDostavljac)
+                eye = view.findViewById<ImageView>(R.id.password_eye2)
+                eye.setOnClickListener{setPassword()}
                 setPreview()
                 setVehicle()
             }
@@ -115,6 +122,10 @@ class RegisterFragment_step3 : Fragment() {
                 password =  view.findViewById<TextView>(R.id.user_passwordProdavac)
                 mapView =   view.findViewById<MapView>(R.id.mapView)
                 btn_registruj_se = view.findViewById<Button>(R.id.registruj_seProdavac)
+                pib_prodavac = view.findViewById<TextView>(R.id.user_pibProdavac)
+                pib_prodavac.setText(userViewModel.user!!.pib)
+                eye = view.findViewById<ImageView>(R.id.password_eye3)
+                eye.setOnClickListener{setPassword()}
                 setPreview()
                 setMap(user.latitude as Double, user.longitude as Double)
             }
@@ -128,13 +139,31 @@ class RegisterFragment_step3 : Fragment() {
 
         return view
     }
+    var passIsShow: Boolean = false
+    fun setPassword(){
+        when(passIsShow){
+            true -> {
+                passIsShow = false
+                password.setText(user.password)
+                eye.setImageResource(R.drawable.icons8_not_visible_96___)
+            }
+            false -> {
+                passIsShow = true
+                password.setText(changePasswordView(user.password))
+                eye.setImageResource(R.drawable.icons8_visible_96___)
+            }
+        }
+    }
+    fun changePasswordView(text: String):String{
+        return "*".repeat(text.length)
+    }
 
     fun setPreview(){
         name.text = user.name
         lastname.text = user.lastname
         username.text = user.username
         email.text = user.email
-        password.text = user.password
+        password.text = changePasswordView(user.password)
     }
 
     fun setVehicle(){
