@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".activities.RegisterActivity">
 
     <ImageView
@@ -31,7 +30,7 @@
         tools:ignore="MissingConstraints,UseCompoundDrawables">
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/back"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="16dp"
