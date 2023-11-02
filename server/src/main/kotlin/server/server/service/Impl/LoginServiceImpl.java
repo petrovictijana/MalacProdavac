@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import server.server.dtos.response.LoginFailedResponse;
+import server.server.exceptions.InvalidLoginCredentialsException;
 import server.server.jwt.JwtGenerator;
 import server.server.models.User;
 import server.server.repository.UserRepository;
@@ -21,10 +22,10 @@ public class LoginServiceImpl implements LoginService {
     public ResponseEntity<?> loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if(user == null)
-            return new ResponseEntity<>(new LoginFailedResponse(true, false), HttpStatus.BAD_REQUEST);
+            throw new InvalidLoginCredentialsException("Invalid login credentials.", new LoginFailedResponse(true, false));
 
         if(!BCrypt.checkpw(password, user.getPassword()))
-            return new ResponseEntity<>(new LoginFailedResponse(false, true), HttpStatus.BAD_REQUEST);
+            throw new InvalidLoginCredentialsException("Invalid login credentials.", new LoginFailedResponse(false, true));
 
         //Generisati jwt token
         return new ResponseEntity<>(jwtGenerator.generateJwtToken(user), HttpStatus.OK);

@@ -1,20 +1,21 @@
 package server.server.service.Impl;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import server.server.dtos.UserDTO;
 import server.server.dtos.request.UserRegistrationRequest;
-import server.server.dtos.response.PibAlreadyExistsResponse;
+import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 import server.server.enums.Roles;
-import server.server.models.Deliverer;
-import server.server.models.DriversLicenses;
-import server.server.models.Seller;
-import server.server.models.User;
+import server.server.exceptions.EmailUsernameAlreadyTakenException;
+import server.server.exceptions.InvalidRoleException;
+import server.server.exceptions.PibAlreadyTakenException;
+import server.server.models.*;
 import server.server.repository.*;
 import server.server.service.RegistrationService;
-import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -29,6 +30,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     RoleRepository roleRepository;
 
+    @SneakyThrows
     @Override
     public ResponseEntity<EmailUsernameAvailabilityResponse> checkNewUserData(UserRegistrationRequest userRegistrationRequest) {
         boolean isUsernameAlredyTaken = isUsernameAlreadyTaken(userRegistrationRequest.getUsername());
@@ -37,21 +39,29 @@ public class RegistrationServiceImpl implements RegistrationService {
         EmailUsernameAvailabilityResponse response = new EmailUsernameAvailabilityResponse(isUsernameAlredyTaken, isEmailAlredyTaken);
 
         if(isUsernameAlredyTaken || isEmailAlredyTaken)
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            throw new EmailUsernameAlreadyTakenException("Email or username is already in use.", response);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @SneakyThrows
     @Override
     public ResponseEntity<?> createNewUser(UserRegistrationRequest userRegistrationRequest) {
         ResponseEntity<EmailUsernameAvailabilityResponse> response = checkNewUserData(userRegistrationRequest);
-        if(response.getBody().isEmailTaken() || response.getBody().isUsernameTaken())
-            return response;
 
-        if(userRegistrationRequest.getRoleId() == Roles.Seller.ordinal()){
+        Roles role = isRoleCorrect(userRegistrationRequest.getRole());
+        if(role == null)
+            throw new InvalidRoleException("Role is invalid. Choose one of three: User, Seller, Deliverer");
+
+        if(role == Roles.SELLER){
+            System.out.println("*************************\n");
+            System.out.println("*************************\n");
+            System.out.println("*************************\n");
+            System.out.println("Prodavac");
             //Ukoliko je u pitanju prodavac
             if(isPibAlreadyExists(userRegistrationRequest.getPib())){
                 //Ukoliko uneti pib vec postoji u bazi podataka
-                return new ResponseEntity<>(new PibAlreadyExistsResponse(true), HttpStatus.BAD_REQUEST);
+                throw new PibAlreadyTakenException("PIB already in use");
+                //return new ResponseEntity<>(new PibAlreadyExistsResponse(true), HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -63,18 +73,19 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
                 .picture(userRegistrationRequest.getImage())
-                .role(roleRepository.findById(userRegistrationRequest.getRoleId()).get())
+                .role(roleRepository.findById((long) (role.ordinal() + 1)).get())
                 .build();
 
         //Kreiran nov korisnik
         User createdUser = userRepository.save(newUser);
         if(createdUser == null){
             //Nesto nije kako treba
-            return new ResponseEntity<>("Dodavanje novog korisnika nije uspelo", HttpStatus.BAD_REQUEST);
+            throw new IllegalStateException("Cuvanje objekta nije uspeslo");
+            //return new ResponseEntity<>("Dodavanje novog korisnika nije uspelo", HttpStatus.BAD_REQUEST);
         }
 
         //Ukoliko je korisnik uspesno kreiran treba ga dodeliti u role
-        if(userRegistrationRequest.getRoleId() == (Roles.Deliverer.ordinal() + 1)){
+        if(role == Roles.DELIVERER){
             //Ukoliko je dostavljac
             //Dodavanje dostavljaca
             Deliverer deliverer = Deliverer.builder()
@@ -85,7 +96,8 @@ public class RegistrationServiceImpl implements RegistrationService {
             Deliverer createdDeliverer = delivererRepository.save(deliverer);
 
             if(createdDeliverer == null){
-                return new ResponseEntity<>("Dodavanje dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
+                throw new IllegalStateException("Cuvanje objekta nije uspeslo");
+                // return new ResponseEntity<>("Dodavanje dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
             }
 
             for (Long licenceId: userRegistrationRequest.getLicenceCategories()) {
@@ -95,11 +107,12 @@ public class RegistrationServiceImpl implements RegistrationService {
                 );
 
                 if(driversLicensesRepository.save(driversLicense) == null)
-                    return new ResponseEntity<>("Dodavanje vozackih kategorija dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
+                    throw new IllegalStateException("Cuvanje objekta nije uspeslo");
+                    // return new ResponseEntity<>("Dodavanje vozackih kategorija dostavljaca nije uspelo", HttpStatus.BAD_REQUEST);
             }
         }
 
-        if(userRegistrationRequest.getRoleId() == (Roles.Seller.ordinal() + 1)){
+        if(role == Roles.SELLER){
             //Dodati u tabelu sellers
             Seller seller = Seller.builder()
                             .user(createdUser)
@@ -111,11 +124,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 
             if(sellerRepository.save(seller) == null){
                 //Nesto nije kako treba
-                return new ResponseEntity<>("Dodavanje prodavca nije uspelo", HttpStatus.BAD_REQUEST);
+                throw new IllegalStateException("Cuvanje objekta nije uspeslo");
+                //return new ResponseEntity<>("Dodavanje prodavca nije uspelo", HttpStatus.BAD_REQUEST);
             }
         }
 
-        return new ResponseEntity<>("Novi korisnik je dodat", HttpStatus.OK);
+        return new ResponseEntity<>(UserDTO.builder()
+                .name(createdUser.getName())
+                .surname(createdUser.getSurname())
+                .username(createdUser.getUsername())
+                .email(createdUser.getEmail())
+                .picture(createdUser.getPicture())
+                .role(createdUser.getRole().getName()).build(), HttpStatus.OK);
     }
 
 
@@ -127,5 +147,22 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
     private boolean isPibAlreadyExists(String pib){
         return sellerRepository.findByPib(pib) != null ? true : false;
+    }
+
+    private Roles isRoleCorrect(String role){
+        if(role == null)
+            return null;
+
+        return Roles.valueOf(role.toUpperCase());
+//        if(role.toUpperCase().equals(Roles.USER.name()))
+//            return Roles.USER;
+//
+//        if(role.toUpperCase().equals(Roles.DELIVERER.name()))
+//            return Roles.DELIVERER;
+//
+//        if(role.toUpperCase().equals(Roles.SELLER.name()))
+//            return Roles.SELLER;
+
+        //return null;
     }
 }
