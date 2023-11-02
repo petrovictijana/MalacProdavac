@@ -83,9 +83,17 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Uspesno ste se ulogovali", Toast.LENGTH_LONG).show()
                 },
                 { error ->
-                    Toast.makeText(this, "Niste se ulogovali", Toast.LENGTH_LONG).show()
-                    error.printStackTrace()
-                    println(error.message)
+                    val response = error.networkResponse
+                    val jsonError = String(response.data)
+                    val responseObject:JSONObject = JSONObject(jsonError)
+                    if(responseObject["message"].equals("Invalid login credentials.")){
+                        Toast.makeText(this, "Korisničko ime ili lozinka se ne poklapaju", Toast.LENGTH_LONG).show()
+                        error.printStackTrace()
+                    }
+                    else{
+                        Toast.makeText(this, "Niste se ulogovali", Toast.LENGTH_LONG).show()
+                        error.printStackTrace()
+                    }
                 }
             )
         }

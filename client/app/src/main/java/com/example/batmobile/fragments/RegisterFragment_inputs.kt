@@ -228,8 +228,6 @@ class RegisterFragment_inputs : Fragment() {
             jsonObject.put("email", value)
 
         var url:String = Config.ip_address+":"+ Config.port + "/registration/step1"
-        println(url)
-        println("SALJEM"+jsonObject)
 
         apiClient.sendPostRequestWithJSONObjectWithJsonResponse(
             url,
@@ -250,12 +248,18 @@ class RegisterFragment_inputs : Fragment() {
                 validateAllInputs()
             },
             { error ->
-                when (type) {
-                    "username"->{   flagUsername = false;
+                val response = error.networkResponse
+                val jsonError = String(response.data)
+                val responseObject:JSONObject = JSONObject(jsonError)
+                println(responseObject)
+                if(responseObject["code"] == 409){
+                    val data = responseObject["data"] as JSONObject
+                    if(data["usernameTaken"]==true){
+                        flagUsername = false;
                         error_username.setText("*Korisničko ime se već koristi");
                         error_username.visibility = View.VISIBLE
                     }
-                    "email" -> {
+                    else if(data["emailTaken"]==true){
                         flagEmail = false;
                         error_email.setText("*Ovaj email se već koristi");
                         error_email.visibility = View.VISIBLE

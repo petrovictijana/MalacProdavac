@@ -218,16 +218,17 @@ class RegisterFragment_step3 : Fragment() {
         jsonObject.put("picture","slika.png")
         when(selectedOption){
             "Kupac" -> {
-                jsonObject.put("roleId",1)
+                jsonObject.put("role","User")
             }
             "Dostavljač" -> {
-                jsonObject.put("roleId",2)
+                jsonObject.put("role","Deliverer")
                 jsonObject.put("licenceCategories", getUserVehicle())
             }
             "Mali prodavac" -> {
-                jsonObject.put("roleId",3)
+                jsonObject.put("role","Seller")
                 jsonObject.put("pib", user.pib)
-                jsonObject.put("location", user.latitude.toString() + " " + user.longitude.toString())
+                jsonObject.put("longitude", user.longitude)
+                jsonObject.put("latitude", user.latitude)
             }
         }
 
@@ -238,12 +239,28 @@ class RegisterFragment_step3 : Fragment() {
             url,
             jsonObject,
             { response -> println(response)
-                Toast.makeText(requireContext(), response, Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Usepsno registrovan korisnik", Toast.LENGTH_LONG).show()
             },
             { error ->
-                Toast.makeText(requireContext(), "korisnik je vec registrovan", Toast.LENGTH_LONG).show()
-                error.printStackTrace()
-                println(error.message)
+
+                val response = error.networkResponse
+                val jsonError = String(response.data)
+                val responseObject:JSONObject = JSONObject(jsonError)
+                println(responseObject)
+                if(responseObject["code"] == 409){
+                    val data = responseObject["data"] as JSONObject
+                    if(data["usernameTaken"]==true){
+                        Toast.makeText(requireContext(), "Korisničko ime je zauzeto", Toast.LENGTH_LONG).show()
+                    }
+                    else if(data["emailTaken"]==true){
+                        Toast.makeText(requireContext(), "Email je zauzet", Toast.LENGTH_LONG).show()
+                    }
+                }
+                else{
+                    Toast.makeText(requireContext(), "korisnik je vec registrovan", Toast.LENGTH_LONG).show()
+                    error.printStackTrace()
+                    println(error.message)
+                }
             }
         )
     }
