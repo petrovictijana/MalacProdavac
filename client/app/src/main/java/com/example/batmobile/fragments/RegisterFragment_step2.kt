@@ -79,12 +79,14 @@ class RegisterFragment_step2 : Fragment() {
 
     private lateinit var vehicle: MutableMap<String, Boolean>
 
+    private lateinit var view: View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_register_step2, container, false)
+        view =  inflater.inflate(R.layout.fragment_register_step2, container, false)
 
         apiCall = ApiClient(requireActivity())
 
@@ -136,6 +138,10 @@ class RegisterFragment_step2 : Fragment() {
         prodavac_lokacija = view.findViewById<EditText>(R.id.lokacija)
         nastaviButton = view.findViewById<Button>(R.id.Nastavi)
 
+        if(userViewModel.selectedOption!=null){
+            setFieldOnStep2(userViewModel, view)
+        }
+
         nastaviButton.setOnClickListener{
             user.pib = prodavac_pib.text.toString()
             user.latitude = live_latitude
@@ -156,32 +162,9 @@ class RegisterFragment_step2 : Fragment() {
             false
         }
 
-        kupacRadioButton.setOnClickListener {
-            kupacOptionsLayout.visibility = View.VISIBLE
-            dostavljacOptionsLayout.visibility=View.GONE
-            prodavacOptionsLayout.visibility = View.GONE
-            val drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.full_fill_button)
-            nastaviButton.background = drawable
-            nastaviButton.isEnabled = true
-        }
+        kupacRadioButton.setOnClickListener { viewForKupac() }
 
-        prodavacRadioButton.setOnClickListener {
-            kupacOptionsLayout.visibility = View.GONE
-            dostavljacOptionsLayout.visibility=View.GONE
-            prodavacOptionsLayout.visibility = View.VISIBLE
-
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-            if (ContextCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
-                getLocation()
-            } else {
-                // Ako nemate dozvolu, zatražite je od korisnika
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
-            }
-            if ((live_latitude >= -90.0 && live_latitude <= 90.0) || (live_longitude >= -180.0 && live_longitude <= 180.0)){ setMap(live_latitude, live_longitude)}
-            else setInitMap()
-            validateNastaviButtonProdavac()
-        }
+        prodavacRadioButton.setOnClickListener { viewForProdavac()}
         prodavac_pib.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Implementacija pre promene teksta
@@ -194,14 +177,77 @@ class RegisterFragment_step2 : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 validateNastaviButtonProdavac() }
         })
-        dostavljacRadioButton.setOnClickListener{
-            kupacOptionsLayout.visibility = View.GONE
-            dostavljacOptionsLayout.visibility=View.VISIBLE
-            prodavacOptionsLayout.visibility = View.GONE
-            validateNastaviButtonDostavljac()
-        }
+        dostavljacRadioButton.setOnClickListener{ viewForDostavljac() }
 
         return view
+    }
+
+    fun viewForKupac(){
+        kupacOptionsLayout.visibility = View.VISIBLE
+        dostavljacOptionsLayout.visibility=View.GONE
+        prodavacOptionsLayout.visibility = View.GONE
+        val drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.full_fill_button)
+        nastaviButton = view.findViewById<Button>(R.id.Nastavi)
+        nastaviButton.background = drawable
+        nastaviButton.isEnabled = true
+    }
+
+    fun viewForDostavljac(){
+        kupacOptionsLayout.visibility = View.GONE
+        dostavljacOptionsLayout.visibility=View.VISIBLE
+        prodavacOptionsLayout.visibility = View.GONE
+        nastaviButton = view.findViewById<Button>(R.id.Nastavi)
+        validateNastaviButtonDostavljac()
+    }
+
+    fun viewForProdavac(){
+        kupacOptionsLayout.visibility = View.GONE
+        dostavljacOptionsLayout.visibility=View.GONE
+        prodavacOptionsLayout.visibility = View.VISIBLE
+        nastaviButton = view.findViewById<Button>(R.id.Nastavi)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ContextCompat.checkSelfPermission(requireActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Imate dozvolu za pristup lokaciji, možete zatražiti lokaciju
+            getLocation()
+        } else {
+            // Ako nemate dozvolu, zatražite je od korisnika
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        }
+        if ((live_latitude >= -90.0 && live_latitude <= 90.0) || (live_longitude >= -180.0 && live_longitude <= 180.0)){ setMap(live_latitude, live_longitude)}
+        else setInitMap()
+        validateNastaviButtonProdavac()
+    }
+
+    fun setFieldOnStep2(userViewModel: UserViewModel, view: View){
+        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroup)
+        when (userViewModel.selectedOption) {
+            "Kupac" -> {
+                val radioButtonToSelect = view.findViewById<RadioButton>(R.id.Kupac)
+                radioButtonToSelect.isChecked = true
+                radioGroup.check(radioButtonToSelect.id)
+                viewForKupac()
+            }
+            "Dostavljač" -> {
+                val radioButtonToSelect = view.findViewById<RadioButton>(R.id.Dostavljac)
+                radioButtonToSelect.isChecked = true
+                radioGroup.check(radioButtonToSelect.id)
+                viewForDostavljac()
+                if(vehicle["auto"]==true){automobil= view.findViewById(R.id.auto);automobil.setBackgroundResource(R.drawable.border_background_orange)}
+                if(vehicle["motocikl"]==true){motocikl= view.findViewById(R.id.motocikl); motocikl.setBackgroundResource(R.drawable.border_background_orange)}
+                if(vehicle["kombi"]==true){kombi= view.findViewById(R.id.kombi); kombi.setBackgroundResource(R.drawable.border_background_orange)}
+                if(vehicle["kamion"]==true){kamion= view.findViewById(R.id.kombi); kamion.setBackgroundResource(R.drawable.border_background_orange)}
+            }
+            "Mali prodavac" -> {
+                val radioButtonToSelect = view.findViewById<RadioButton>(R.id.Prodavac)
+                radioButtonToSelect.isChecked = true
+                radioGroup.check(radioButtonToSelect.id)
+                viewForProdavac()
+                prodavac_pib.setText(userViewModel.user!!.pib)
+                setMap(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
+                sendRequestForStringLocation(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
+            }
+        }
     }
 
     fun setInitMap(){
@@ -317,6 +363,7 @@ class RegisterFragment_step2 : Fragment() {
         }
     }
     private fun validateNastaviButtonProdavac(){
+        prodavac_pib = view.findViewById<EditText>(R.id.pib)
         if(prodavac_pib.text.length == 0) {
             //tada nije dozvoljeno dalje
             val drawable = ContextCompat.getDrawable(requireContext(),

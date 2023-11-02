@@ -1,5 +1,6 @@
 package com.example.batmobile.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,13 +11,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.Navigation
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.example.batmobile.services.Authenticate
 import org.json.JSONObject
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.batmobile.R
+import com.example.batmobile.activities.LoginActivity
 import com.example.batmobile.viewModels.UserViewModel
 import com.example.batmobile.models.User
 
@@ -65,7 +70,10 @@ class RegisterFragment_inputs : Fragment() {
         val userViewModel: UserViewModel by activityViewModels()
 
         back =                      view.findViewById<ImageView>(R.id.back)
-        back.setOnClickListener{ }
+        back.setOnClickListener{
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         name =                      view.findViewById<EditText>(R.id.name)
         lastname =                  view.findViewById<EditText>(R.id.lastname)
@@ -116,8 +124,31 @@ class RegisterFragment_inputs : Fragment() {
         eye_password.setOnClickListener{showPasswordOg(eye_password)}
         eye_password_confirm.setOnClickListener{showPasswordOg(eye_password_confirm)}
 
+        setInputs(userViewModel)
+
         return view
 
+    }
+
+    fun setInputs(userViewModel: UserViewModel){
+        if(userViewModel.user!=null){
+            name.setText(userViewModel.user!!.name)
+            lastname.setText(userViewModel.user!!.lastname)
+            username.setText(userViewModel.user!!.username)
+            email.setText(userViewModel.user!!.email)
+            password.setText(userViewModel.user!!.password)
+            password_confirm.setText(userViewModel.user!!.password)
+
+            validateIsHaveInput(name, "name", error_name)
+            validateIsHaveInput(lastname, "lastname", error_lastname)
+            validateIsHaveInput(username, "username", error_username)
+            checkExisting("username",username.text.toString())
+            checkExisting("email",email.text.toString())
+            validateEmail(email, error_email)
+            validatePassword(password, error_password)
+            validateConfirmPassword(password, password_confirm, error_password_confirm)
+            validateAllInputs()
+        }
     }
 
     fun validateIsHaveInput(text: EditText, type:String, error_text: TextView){
@@ -216,6 +247,7 @@ class RegisterFragment_inputs : Fragment() {
                         error_email.visibility = View.INVISIBLE
                     }
                 }
+                validateAllInputs()
             },
             { error ->
                 when (type) {
@@ -229,6 +261,7 @@ class RegisterFragment_inputs : Fragment() {
                         error_email.visibility = View.VISIBLE
                     }
                 }
+                validateAllInputs()
             }
         )
     }
