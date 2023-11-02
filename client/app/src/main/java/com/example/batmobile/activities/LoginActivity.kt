@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.batmobile.R
+import com.example.batmobile.RegisterActivityOg
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.example.batmobile.services.Authenticate
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
     fun goToRegisterActivity(view:View){
-        val intent: Intent = Intent(this, RegisterActivity::class.java)
+        val intent: Intent = Intent(this, RegisterActivityOg::class.java)
         startActivity(intent)
         finish()
     }
