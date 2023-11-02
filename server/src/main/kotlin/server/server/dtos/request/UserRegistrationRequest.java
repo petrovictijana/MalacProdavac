@@ -20,10 +20,11 @@ public class UserRegistrationRequest {
     private String email;
     @Lob
     private String image;
-    private Long roleId;
+    private String role;
     //Za dostavljaca
     private ArrayList<Long> licenceCategories;
     //Za prodavca
     private String pib;
-    private String location;
+    private double longitude;
+    private double latitude;
 }
