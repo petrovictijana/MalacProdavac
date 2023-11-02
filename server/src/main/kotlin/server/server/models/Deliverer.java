@@ -21,6 +21,4 @@ public class Deliverer {
     private String location;
     private double longitude;
     private double latitude;
-
-
 }

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import server.server.dtos.request.UserRegistrationRequest;
-import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 import server.server.dtos.response.PibAlreadyExistsResponse;
 import server.server.enums.Roles;
 import server.server.models.Deliverer;
@@ -15,6 +14,7 @@ import server.server.models.Seller;
 import server.server.models.User;
 import server.server.repository.*;
 import server.server.service.RegistrationService;
+import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
@@ -47,7 +47,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if(response.getBody().isEmailTaken() || response.getBody().isUsernameTaken())
             return response;
 
-        if(userRegistrationRequest.getRoleId() == Roles.SELLER.ordinal()){
+        if(userRegistrationRequest.getRoleId() == Roles.Seller.ordinal()){
             //Ukoliko je u pitanju prodavac
             if(isPibAlreadyExists(userRegistrationRequest.getPib())){
                 //Ukoliko uneti pib vec postoji u bazi podataka
@@ -74,12 +74,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         //Ukoliko je korisnik uspesno kreiran treba ga dodeliti u role
-        if(userRegistrationRequest.getRoleId() == (Roles.DELIVERER.ordinal() + 1)){
+        if(userRegistrationRequest.getRoleId() == (Roles.Deliverer.ordinal() + 1)){
             //Ukoliko je dostavljac
             //Dodavanje dostavljaca
             Deliverer deliverer = Deliverer.builder()
                     .user(createdUser)
-                    .location(userRegistrationRequest.getLocation())
+                    .latitude(userRegistrationRequest.getLatitude())
+                    .longitude(userRegistrationRequest.getLongitude())
                     .build();
             Deliverer createdDeliverer = delivererRepository.save(deliverer);
 
@@ -98,12 +99,13 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
 
-        if(userRegistrationRequest.getRoleId() == (Roles.SELLER.ordinal() + 1)){
+        if(userRegistrationRequest.getRoleId() == (Roles.Seller.ordinal() + 1)){
             //Dodati u tabelu sellers
             Seller seller = Seller.builder()
                             .user(createdUser)
                             .pib(userRegistrationRequest.getPib())
-                            .address(userRegistrationRequest.getLocation())
+                            .latitude(userRegistrationRequest.getLatitude())
+                            .longitude(userRegistrationRequest.getLongitude())
                             .build();
             sellerRepository.save(seller);
 
@@ -115,8 +117,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         return new ResponseEntity<>("Novi korisnik je dodat", HttpStatus.OK);
     }
-
-
 
 
     private boolean isUsernameAlreadyTaken(String username){

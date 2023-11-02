@@ -25,5 +25,6 @@ public class UserRegistrationRequest {
     private ArrayList<Long> licenceCategories;
     //Za prodavca
     private String pib;
-    private String location;
+    private double longitude;
+    private double latitude;
 }
