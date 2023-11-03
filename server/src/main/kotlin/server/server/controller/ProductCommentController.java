@@ -20,14 +20,8 @@ public class ProductCommentController {
     ProductCommentService productCommentService;
 
     @GetMapping("/comments/{productId}")
-    public  ResponseEntity<List<ProductComment>> getAllCommentsForProduct(@PathVariable Long productId){
-        List<ProductComment> productComments = productCommentService.getProductCommentsByProductId(productId);
-        if(productComments!=null)
-        {
-            return ResponseEntity.ok(productComments);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+    public  List<ProductComment> getAllCommentsForProduct(@PathVariable Long productId){
+        return productCommentService.getProductCommentsByProductId(productId);
     }
 
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.server.dtos.SellerDTO;
 import server.server.models.Product;
 import server.server.models.Seller;
 import server.server.service.ProductService;
@@ -30,13 +31,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/seller/{id}")
-    public ResponseEntity<Seller> getSellerByProductId(@PathVariable Long id){
-        Seller seller = productService.getSeller(id);
-        if (seller != null) {
-            return ResponseEntity.ok(seller);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> getSellerByProductId(@PathVariable Long id){
+       return productService.getSellerByProductId(id);
     }
 
 

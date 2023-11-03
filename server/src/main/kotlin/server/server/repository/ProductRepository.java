@@ -3,6 +3,7 @@ package server.server.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import server.server.dtos.SellerDTO;
 import server.server.models.Product;
 import server.server.models.Seller;
 
