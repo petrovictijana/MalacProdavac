@@ -94,4 +94,16 @@ public class CustomErrorController {
                 .data(null)
                 .build(), status);
     }
+
+    @ExceptionHandler(InvalidSellerIdException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSellerIdException(Exception e){
+        InvalidSellerIdException invalidSellerIdException = (InvalidSellerIdException) e;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>( ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message(e.getMessage())
+                .data(null)
+                .build(), status);
+    }
 }

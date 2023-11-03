@@ -20,12 +20,7 @@ public class SellerController {
     SellerService sellerService;
 
     @GetMapping("/seller/{id}")
-    public ResponseEntity<Optional<Seller>> getHouseholdById(@PathVariable Long id){
-        Optional<Seller> seller = sellerService.getHouseholdById(id);
-        if (seller != null) {
-            return ResponseEntity.ok(seller);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> getHouseholdById(@PathVariable Long id){
+        return sellerService.getHouseholdById(id);
     }
 }

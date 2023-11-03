@@ -1,9 +1,7 @@
 package server.server.service;
 
-import server.server.models.Seller;
-
-import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 public interface SellerService {
-    Optional<Seller> getHouseholdById(Long id);
+    ResponseEntity<?> getHouseholdById(Long id);
 }
