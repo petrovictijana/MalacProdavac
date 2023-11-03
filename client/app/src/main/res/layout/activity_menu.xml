@@ -70,15 +70,15 @@
     <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         app:mbn_circleColor="@color/orange"
         app:mbn_backgroundBottomColor="@color/white"
-        app:mbn_countBackgroundColor="@color/white"
+        app:mbn_countBackgroundColor="@color/black"
         app:mbn_countTextColor="@color/light_grey"
         app:mbn_defaultIconColor="@color/grey"
-        app:mbn_rippleColor="@color/black"
-        app:mbn_selectedIconColor="@color/dark_blue"
-        app:mbn_shadowColor="@color/grey"
+        app:mbn_rippleColor="@color/grey"
+        app:mbn_selectedIconColor="@color/black"
+        app:mbn_shadowColor="@color/light_grey"
         android:layout_alignParentBottom="true"
         />
 
