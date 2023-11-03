@@ -1,9 +1,7 @@
 package server.server.service;
 
-import server.server.models.ProductComment;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 public interface ProductCommentService {
-    List<ProductComment> getProductCommentsByProductId(Long productId);
+    ResponseEntity<?> getProductCommentsByProductId(Long productId);
 }

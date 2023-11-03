@@ -106,4 +106,16 @@ public class CustomErrorController {
                 .data(null)
                 .build(), status);
     }
+
+    @ExceptionHandler(InvalidSearchException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSearchException(Exception e){
+        InvalidSearchException invalidSearchException = (InvalidSearchException) e;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>( ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message(e.getMessage())
+                .data(null)
+                .build(), status);
+    }
 }

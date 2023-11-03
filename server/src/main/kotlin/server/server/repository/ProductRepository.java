@@ -16,4 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByProductNameContainingIgnoreCase(String productName);
     @Query("SELECT p.seller FROM Product p WHERE p.productId = :productId")
     Seller findSellerByProductId(Long productId);
+
+    List<Product> findProductByProductName(String query);
 }
