@@ -21,7 +21,7 @@
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MenuActivity"
+            android:name=".activities.NeulogovanActivity"
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"

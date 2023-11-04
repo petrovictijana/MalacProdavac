@@ -7,7 +7,7 @@ import android.widget.RelativeLayout
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.example.batmobile.R
 
-class MenuActivity : AppCompatActivity() {
+class NeulogovanActivity : AppCompatActivity() {
 
     private lateinit var bottomNavigation: MeowBottomNavigation
     private lateinit var home: RelativeLayout
@@ -17,13 +17,13 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu)
+        setContentView(R.layout.activity_neulogovan)
 
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        home = findViewById(R.id.home)
-        explore = findViewById(R.id.explore)
-        inspect = findViewById(R.id.inspect)
-        profile = findViewById(R.id.profile)
+//        bottomNavigation = findViewById(R.id.bottomNavigation)
+//        home = findViewById(R.id.home)
+//        explore = findViewById(R.id.explore)
+//        inspect = findViewById(R.id.inspect)
+//        profile = findViewById(R.id.profile)
 
         bottomNavigation.show(2,true)
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.home))
