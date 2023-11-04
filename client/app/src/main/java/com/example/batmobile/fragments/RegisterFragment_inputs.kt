@@ -287,7 +287,6 @@ class RegisterFragment_inputs : Fragment() {
                             error_email.visibility = View.VISIBLE
                         }
                     }
-                    validateEmail(email, error_email)
                     validateAllInputs()
                 }
 
