@@ -2,15 +2,7 @@ package server.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import server.server.dtos.response.MonthTopSellers;
-import server.server.models.Order;
-import server.server.repository.OrderRepository;
-import server.server.service.Impl.TopPerformersServiceImpl;
 import server.server.service.TopPerformersService;
-
-import java.util.List;
 
 @SpringBootApplication
 public class Main {

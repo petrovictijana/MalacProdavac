@@ -31,7 +31,7 @@ public class Product {
     private Category category;
 
     @ManyToOne()
-    @JoinColumn(name="measurment_id")
+    @JoinColumn(name="measurement_id")
     private Measurement measurement;
 
 }

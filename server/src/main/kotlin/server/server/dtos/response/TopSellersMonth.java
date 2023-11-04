@@ -1,8 +1,5 @@
 package server.server.dtos.response;
 
-import jakarta.persistence.ColumnResult;
-import jakarta.persistence.ConstructorResult;
-import jakarta.persistence.SqlResultSetMapping;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +9,7 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class MonthTopSellers {
+public class TopSellersMonth {
     private Long id;
     private String name;
     private String surname;

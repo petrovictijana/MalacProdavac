@@ -2,8 +2,8 @@ package server.server.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import server.server.dtos.response.MonthTopSellers;
-import server.server.mappers.TopMonthSellersMapper;
+import server.server.dtos.response.TopProductsMonth;
+import server.server.dtos.response.TopSellersMonth;
 import server.server.repository.OrderRepository;
 import server.server.service.TopPerformersService;
 
@@ -15,11 +15,11 @@ public class TopPerformersServiceImpl implements TopPerformersService {
     @Autowired
     OrderRepository orderRepository;
     @Override
-    public List<MonthTopSellers> getTop3SellersOfTheMonth() {
+    public List<TopSellersMonth> getTop3SellersOfTheMonth() {
         List<Object[]> list = orderRepository.getTop3SellersOfTheMonth();
-        List<MonthTopSellers> monthTopSellers = new ArrayList<>();
+        List<TopSellersMonth> topSellersMonthList = new ArrayList<>();
         for (Object o[]: list) {
-            MonthTopSellers seller = MonthTopSellers.builder()
+            TopSellersMonth seller = TopSellersMonth.builder()
                     .id((Long) o[0])
                     .name((String) o[1])
                     .surname((String) o[2])
@@ -28,9 +28,32 @@ public class TopPerformersServiceImpl implements TopPerformersService {
                     .latitude((Double) o[5])
                     .numberOfOrders((Long) o[6])
                     .build();
-            monthTopSellers.add(seller);
+            topSellersMonthList.add(seller);
         }
 
-        return monthTopSellers;
+        return topSellersMonthList;
+    }
+
+    @Override
+    public List<TopProductsMonth> getTop3ProductsOfTheMonth() {
+        List<Object[]> list = orderRepository.getTop3ProductsOfTheMonth();
+        List<TopProductsMonth> topProductsMonthList = new ArrayList<>();
+        for (Object o[]: list) {
+            TopProductsMonth product = TopProductsMonth.builder()
+                    .productId((Long) o[0])
+                    .productName((String) o[1])
+                    .productDescription((String) o[2])
+                    .productPrice((Double) o[3])
+                    .productCategoryId((Long) o[4])
+                    .productMeasurementId((Long) o[5])
+                    .sellerName((String) o[6])
+                    .sellerSurname((String) o[7])
+                    .sellerUsername((String) o[8])
+                    .soldItems((Long) o[9])
+                    .build();
+            topProductsMonthList.add(product);
+        }
+
+        return topProductsMonthList;
     }
 }

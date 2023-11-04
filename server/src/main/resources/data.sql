@@ -34,12 +34,12 @@
     insert IGNORE into order_status (order_status_id, name) values (2, "naruceno");
     insert IGNORE into order_status (order_status_id, name) values (3, "slanje");
 
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Jabuke", 4, 3, 4, "fedf", 60, "Naša organska jabuka je savršen spoj ukusa i zdravlja, bez pesticida i hemijskih đubriva.");
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Kruske", 4, 3, 4, "fedf", 125, "Naše organske kruške su sočne i prirodno uzgajane, pružajući osvežavajući ukus bez upotrebe pesticida i hemijskih đubriva.");
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Maline", 4, 3, 4, "fedf", 390, "Sveže organske maline - prirodno uzgojene, ukusne i bez štetnih hemikalija");
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Svinjski but", 1, 4, 4, "fedf", 1200, "Svinjski but - vrhunski komad mesa sa bogatim ukusom i mekoćom koji će zadovoljiti svačije gurmanluk.");
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Jagnjeci kotleti", 4, 4, 4, "fedf", 2420, "Jagnjeći kotleti - delikatesno jelo s neodoljivim ukusom i sočnošću koji će vas oduševiti.");
-    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurment_id, picture, price, description) values ("Guscja jaja", 2, 5, 3, "fedf", 20, "Gusčja jaja - prirodna poslastica s bogatim i intenzivnim ukusom, savršena za različite kulinarske kreacije.");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Jabuke", 4, 3, 4, "fedf", 60, "Naša organska jabuka je savršen spoj ukusa i zdravlja, bez pesticida i hemijskih đubriva.");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Kruske", 4, 3, 4, "fedf", 125, "Naše organske kruške su sočne i prirodno uzgajane, pružajući osvežavajući ukus bez upotrebe pesticida i hemijskih đubriva.");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Maline", 4, 3, 4, "fedf", 390, "Sveže organske maline - prirodno uzgojene, ukusne i bez štetnih hemikalija");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Svinjski but", 1, 4, 4, "fedf", 1200, "Svinjski but - vrhunski komad mesa sa bogatim ukusom i mekoćom koji će zadovoljiti svačije gurmanluk.");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Jagnjeci kotleti", 4, 4, 4, "fedf", 2420, "Jagnjeći kotleti - delikatesno jelo s neodoljivim ukusom i sočnošću koji će vas oduševiti.");
+    INSERT IGNORE INTO products(product_name, category_id, seller_id, measurement_id, picture, price, description) values ("Guscja jaja", 2, 5, 3, "fedf", 20, "Gusčja jaja - prirodna poslastica s bogatim i intenzivnim ukusom, savršena za različite kulinarske kreacije.");
 
     INSERT IGNORE INTO orders (seller_id, latitude_buyer, longitude_buyer, order_date, buyer_id, order_status_id) VALUES (3, 45.5, 41.5, "2023-10-30 18:23:00.000000", 1, 1);
     INSERT IGNORE INTO orders (seller_id, latitude_buyer, longitude_buyer, order_date, buyer_id, order_status_id) VALUES (4, 45.5, 41.5, "2023-10-24 18:23:00.000000", 6, 1);

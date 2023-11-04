@@ -3,7 +3,7 @@ package server.server.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import server.server.dtos.response.MonthTopSellers;
+import server.server.dtos.response.TopSellersMonth;
 
 @Mapper
 public interface TopMonthSellersMapper {
@@ -19,5 +19,5 @@ public interface TopMonthSellersMapper {
                     @Mapping(target = "numberOfOrders", source = "numberOfOrders")
             }
     )
-    MonthTopSellers ObjectToMonthTopSellers(Object o);
+    TopSellersMonth ObjectToMonthTopSellers(Object o);
 }
