@@ -19,6 +19,7 @@ import com.example.batmobile.viewModels.UserViewModel
 import com.example.batmobile.models.User
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
+import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONArray
 import org.json.JSONObject
 import org.osmdroid.util.GeoPoint
@@ -32,6 +33,7 @@ class RegisterFragment_step3 : Fragment() {
 
     private lateinit var selectedOption:String
 
+    private lateinit var image: CircleImageView
     private lateinit var name: TextView
     private lateinit var lastname: TextView
     private lateinit var username: TextView
@@ -82,6 +84,7 @@ class RegisterFragment_step3 : Fragment() {
                 // Prikazi layout za kupca
                 val kupacLayout = view.findViewById<LinearLayout>(R.id.kupacLayout)
                 kupacLayout.visibility = View.VISIBLE
+                image =     view.findViewById<CircleImageView>(R.id.imageViewKupac)
                 name =      view.findViewById<TextView>(R.id.user_nameKupac)
                 lastname =  view.findViewById<TextView>(R.id.user_lastnameKupac)
                 username =  view.findViewById<TextView>(R.id.user_usernameKupac)
@@ -96,6 +99,7 @@ class RegisterFragment_step3 : Fragment() {
                 // Prikazi layout za dostavljača
                 val dostavljacLayout = view.findViewById<LinearLayout>(R.id.dostavljacLayout)
                 dostavljacLayout.visibility = View.VISIBLE
+                image =     view.findViewById<CircleImageView>(R.id.imageViewDostavljac)
                 name =      view.findViewById<TextView>(R.id.user_nameDostavljac)
                 lastname =  view.findViewById<TextView>(R.id.user_lastnameDostavljac)
                 username =  view.findViewById<TextView>(R.id.user_usernameDostavljac)
@@ -115,6 +119,7 @@ class RegisterFragment_step3 : Fragment() {
                 // Prikazi layout za malog prodavca
                 val prodavacLayout = view.findViewById<LinearLayout>(R.id.prodavacLayout)
                 prodavacLayout.visibility = View.VISIBLE
+                image =     view.findViewById<CircleImageView>(R.id.imageViewProdavac)
                 name =      view.findViewById<TextView>(R.id.user_nameProdavac)
                 lastname =  view.findViewById<TextView>(R.id.user_lastnameProdavac)
                 username =  view.findViewById<TextView>(R.id.user_usernameProdavac)
@@ -129,6 +134,10 @@ class RegisterFragment_step3 : Fragment() {
                 setPreview()
                 setMap(user.latitude as Double, user.longitude as Double)
             }
+        }
+
+        if(image!=null && user.profileImageUri!=null){
+            image.setImageURI(user.profileImageUri)
         }
 
         if(btn_registruj_se!=null){

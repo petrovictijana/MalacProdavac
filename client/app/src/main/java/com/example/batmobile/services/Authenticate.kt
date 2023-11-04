@@ -30,7 +30,7 @@ class Authenticate {
         }
 
         private fun regexPasswordValidationPattern(password:String): Boolean {
-            val regexString: String = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+\$"
+            val regexString: String = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}\$"
             val regex = Regex(regexString)
             return regex.matches(password)
         }
@@ -41,11 +41,17 @@ class Authenticate {
                 return "*Morate uneti neku šifru"
             }
             else if(!regexPasswordValidationPattern(password_text)){
-                return "*Šifra mora sadržati velika, mala slova i brojeve"
+                return "*Šifra mora sadržati 8+ znakova, velika i mala slova, brojeve"
             }
             else {
                 return "true"
             }
+        }
+
+        fun validateUsername(username: String):Boolean{
+            val regexString = "^[a-zA-Z0-9!@#\$%^&*()-_+=]*\$"
+            val regex = Regex(regexString)
+            return regex.matches(username)
         }
 
         private fun validateBasicInput(password: EditText): Boolean {

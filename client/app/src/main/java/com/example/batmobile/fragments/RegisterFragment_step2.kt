@@ -1,7 +1,11 @@
 package com.example.batmobile.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -28,6 +32,7 @@ import com.example.batmobile.models.User
 import com.example.batmobile.network.ApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import de.hdodenhof.circleimageview.CircleImageView
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -81,6 +86,9 @@ class RegisterFragment_step2 : Fragment() {
 
     private lateinit var view: View
 
+    private lateinit var import_image_kupac: CircleImageView
+    private lateinit var import_image_dostavljac: CircleImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -116,6 +124,17 @@ class RegisterFragment_step2 : Fragment() {
         kupacEmail = view.findViewById<TextView>(R.id.user_emailKupac)
         dostavljacUserName = view.findViewById<TextView>(R.id.user_usernameDostavljac)
         dostavljacEmail = view.findViewById<TextView>(R.id.user_emailDostavljac)
+
+        import_image_kupac = view.findViewById<CircleImageView>(R.id.imageView3)
+        import_image_dostavljac = view.findViewById<CircleImageView>(R.id.imageView4)
+        addActionForImage()
+
+        if(import_image_kupac!=null && user.profileImageUri!=null){
+            import_image_kupac.setImageURI(user.profileImageUri)
+        }
+        if(import_image_dostavljac!=null && user.profileImageUri!=null){
+            import_image_dostavljac.setImageURI(user.profileImageUri)
+        }
 
         if (user != null) {
             kupacUserName.setText(user.username)
@@ -244,8 +263,10 @@ class RegisterFragment_step2 : Fragment() {
                 radioGroup.check(radioButtonToSelect.id)
                 viewForProdavac()
                 prodavac_pib.setText(userViewModel.user!!.pib)
-                setMap(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
-                sendRequestForStringLocation(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
+                if(userViewModel.user!!.latitude != null && userViewModel.user!!.longitude !=null ){
+                    setMap(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
+                    sendRequestForStringLocation(userViewModel.user!!.latitude as Double, userViewModel.user!!.longitude as Double)
+                }
             }
         }
     }
@@ -402,6 +423,43 @@ class RegisterFragment_step2 : Fragment() {
             R.id.kamion ->      {setVehicleInformation("kamion", view)}
         }
     }
+    private val PICK_IMAGE_REQUEST_KUPAC = 1
+    private val PICK_IMAGE_REQUEST_DOSTAVLJAC = 2
+    fun addActionForImage(){
+        import_image_kupac.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_KUPAC)
+        }
+        import_image_dostavljac.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_DOSTAVLJAC)
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri = data.data!!
+
+            when (requestCode) {
+                PICK_IMAGE_REQUEST_KUPAC -> {
+                    val imageViewKupac = view.findViewById<ImageView>(R.id.imageView3)
+                    imageViewKupac.setImageURI(imageUri)
+                    val imageViewProdavac = view.findViewById<ImageView>(R.id.imageView4)
+                    imageViewProdavac.setImageURI(imageUri)
+                    val userViewModel: UserViewModel by activityViewModels()
+                    userViewModel.user?.profileImageUri = imageUri
+                }
+                PICK_IMAGE_REQUEST_DOSTAVLJAC -> {
+                    val imageViewKupac = view.findViewById<ImageView>(R.id.imageView3)
+                    imageViewKupac.setImageURI(imageUri)
+                    val imageViewProdavac = view.findViewById<ImageView>(R.id.imageView4)
+                    imageViewProdavac.setImageURI(imageUri)
+                    val userViewModel: UserViewModel by activityViewModels()
+                    userViewModel.user?.profileImageUri = imageUri
+                }
+            }
+        }
+    }
 
 }
