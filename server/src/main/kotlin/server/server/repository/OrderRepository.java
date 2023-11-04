@@ -21,8 +21,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ORDER BY jt.numberOfOrders DESC", nativeQuery = true)
     List<Object[]> getTop3SellersOfTheMonth();
 
-    @Query(value = "SELECT p.product_id as productId, p.product_name as productName, p.description as productDescription, p.price as productPrice, p.category_id as productCategoryId, p.measurement_id as productMeasurementId, s.name as sellerName, s.surname as sellerSurname, s.username as sellerUsername, products_top.soldItems as soldItems\n" +
-            "FROM products p JOIN users s ON p.seller_id = s.user_id JOIN\n" +
+    @Query(value = "SELECT p.product_id as productId, p.product_name as productName, p.picture as productPicture, u.username as sellerUsername, s.longitude as sellerLongitude, s.latitude as sellerLatitude, products_top.soldItems as soldItems\n" +
+            "FROM products p JOIN sellers s ON p.seller_id = s.seller_id JOIN users u ON u.user_id = s.seller_id JOIN\n" +
             "(SELECT product_id, count(product_id) as soldItems\n" +
             "FROM purchase_order\n" +
             "WHERE order_id in (SELECT order_id\n" +

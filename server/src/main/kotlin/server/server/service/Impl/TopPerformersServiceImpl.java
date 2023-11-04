@@ -42,14 +42,11 @@ public class TopPerformersServiceImpl implements TopPerformersService {
             TopProductsMonth product = TopProductsMonth.builder()
                     .productId((Long) o[0])
                     .productName((String) o[1])
-                    .productDescription((String) o[2])
-                    .productPrice((Double) o[3])
-                    .productCategoryId((Long) o[4])
-                    .productMeasurementId((Long) o[5])
-                    .sellerName((String) o[6])
-                    .sellerSurname((String) o[7])
-                    .sellerUsername((String) o[8])
-                    .soldItems((Long) o[9])
+                    .productPicture((String) o[2])
+                    .sellerUsername((String) o[3])
+                    .longitude((Double) o[4])
+                    .latitude((Double) o[5])
+                    .soldItems((Long) o[6])
                     .build();
             topProductsMonthList.add(product);
         }

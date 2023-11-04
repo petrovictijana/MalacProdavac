@@ -10,12 +10,9 @@ import lombok.Setter;
 public class TopProductsMonth {
     private Long productId;
     private String productName;
-    private String productDescription;
-    private double productPrice;
-    private Long productCategoryId;
-    private Long productMeasurementId;
-    private String sellerName;
-    private String sellerSurname;
+    private String productPicture;
     private String sellerUsername;
+    private Double longitude;
+    private Double latitude;
     private Long soldItems;
 }
