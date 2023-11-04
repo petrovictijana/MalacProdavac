@@ -48,7 +48,9 @@ class RegisterFragment_inputs : Fragment() {
     var flagName: Boolean = false
     var flagLastname: Boolean = false
     var flagUsername: Boolean = false
+    var flagUsernameExisting: Boolean = true
     var flagEmail: Boolean = false
+    var flagEmailExisting: Boolean = true
     var flagPassword: Boolean = false
     var flagPassword_confirm: Boolean = false
 
@@ -167,6 +169,14 @@ class RegisterFragment_inputs : Fragment() {
                 "username" ->   { flagUsername = false ;    error_text.visibility = View.VISIBLE  }
             }
         }
+
+        if(type.equals("username")){
+            if(!Authenticate.validateUsername(text.text.toString())){
+                flagUsername = false ;
+                error_text.visibility = View.VISIBLE
+            }
+        }
+
         validateAllInputs()
     }
 
@@ -183,7 +193,7 @@ class RegisterFragment_inputs : Fragment() {
         val response = Authenticate.validatePassword(text.text.toString())
         when(response){
             "*Morate uneti neku šifru"->                            { flagPassword = false; error_text.setText(response); error_text.visibility = View.VISIBLE}
-            "*Šifra mora sadržati velika, mala slova i brojeve"->   { flagPassword = false; error_text.setText(response); error_text.visibility = View.VISIBLE}
+            "*Šifra mora sadržati 8+ znakova, velika i mala slova, brojeve"->   { flagPassword = false; error_text.setText(response); error_text.visibility = View.VISIBLE}
             "true"->                                                { flagPassword = true; error_text.setText(response); error_text.visibility = View.INVISIBLE}
         }
         validateAllInputs()
@@ -235,37 +245,51 @@ class RegisterFragment_inputs : Fragment() {
             { response ->
                 println(response)
                 when (type) {
-                    "username"->{   flagUsername = true;
-                        error_username.setText("");
-                        error_username.visibility = View.INVISIBLE
+                    "username"->{
+                        if(flagUsernameExisting == false){
+                            flagUsernameExisting = true
+                            flagUsername = true;
+                            error_username.setText("");
+                            error_username.visibility = View.INVISIBLE
+                        }
                     }
                     "email" -> {
-                        flagEmail = true;
-                        error_email.setText("");
-                        error_email.visibility = View.INVISIBLE
+                        if(flagEmailExisting == false){
+                            flagEmailExisting = true
+                            flagEmail = true;
+                            error_email.setText("");
+                            error_email.visibility = View.INVISIBLE
+                        }
+
                     }
                 }
                 validateAllInputs()
             },
             { error ->
-                val response = error.networkResponse
-                val jsonError = String(response.data)
-                val responseObject:JSONObject = JSONObject(jsonError)
-                println(responseObject)
-                if(responseObject["code"] == 409){
-                    val data = responseObject["data"] as JSONObject
-                    if(data["usernameTaken"]==true){
-                        flagUsername = false;
-                        error_username.setText("*Korisničko ime se već koristi");
-                        error_username.visibility = View.VISIBLE
+                if(error.networkResponse!=null)
+                {
+                    val response = error.networkResponse
+                    val jsonError = String(response.data)
+                    val responseObject:JSONObject = JSONObject(jsonError)
+                    println(responseObject)
+                    if(responseObject["code"] == 409){
+                        val data = responseObject["data"] as JSONObject
+                        if(data["usernameTaken"]==true){
+                            flagUsernameExisting = false
+                            flagUsername = false;
+                            error_username.setText("*Korisničko ime se već koristi");
+                            error_username.visibility = View.VISIBLE
+                        }
+                        else if(data["emailTaken"]==true){
+                            flagEmailExisting = false
+                            flagEmail = false;
+                            error_email.setText("*Ovaj email se već koristi");
+                            error_email.visibility = View.VISIBLE
+                        }
                     }
-                    else if(data["emailTaken"]==true){
-                        flagEmail = false;
-                        error_email.setText("*Ovaj email se već koristi");
-                        error_email.visibility = View.VISIBLE
-                    }
+                    validateAllInputs()
                 }
-                validateAllInputs()
+
             }
         )
     }

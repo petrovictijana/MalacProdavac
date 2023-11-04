@@ -1,5 +1,6 @@
 package com.example.batmobile.models
 
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -12,7 +13,8 @@ data class User(
     var vehicle: MutableMap<String, Boolean> = mutableMapOf("auto" to false, "motocikl" to false, "kombi" to false, "kamion" to false),
     var pib: String? = null,
     var latitude: Double? = null,
-    var longitude: Double? = null
+    var longitude: Double? = null,
+    var profileImageUri: Uri? = null
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -27,6 +29,7 @@ data class User(
         pib = parcel.readString()
         latitude = parcel.readDouble()
         longitude = parcel.readDouble()
+        profileImageUri = parcel.readParcelable(Uri::class.java.classLoader)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -39,6 +42,7 @@ data class User(
         parcel.writeString(pib)
         parcel.writeDouble(latitude ?: -100.0)
         parcel.writeDouble(longitude ?: 200.0)
+        parcel.writeParcelable(profileImageUri, flags)
     }
 
     override fun describeContents(): Int {
