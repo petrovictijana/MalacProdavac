@@ -1,8 +1,6 @@
 package server.server.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,21 +11,14 @@ import lombok.*;
 @Builder
 public class PurchaseOrder {
     @Id
-    @Column(name="order_id")
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private Order orderId;
 
     @Id
-    @Column(name="product_id")
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name="product_id")
+    private Product product;
 
     private int quantity;
-
-    @Override
-    public String toString() {
-        return "PurchaseOrder{" +
-                "orderId=" + orderId +
-                ", productId=" + productId +
-                ", quantity=" + quantity +
-                '}';
-    }
 }

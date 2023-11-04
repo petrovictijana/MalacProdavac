@@ -154,15 +154,5 @@ public class RegistrationServiceImpl implements RegistrationService {
             return null;
 
         return Roles.valueOf(role.toUpperCase());
-//        if(role.toUpperCase().equals(Roles.USER.name()))
-//            return Roles.USER;
-//
-//        if(role.toUpperCase().equals(Roles.DELIVERER.name()))
-//            return Roles.DELIVERER;
-//
-//        if(role.toUpperCase().equals(Roles.SELLER.name()))
-//            return Roles.SELLER;
-
-        //return null;
     }
 }
