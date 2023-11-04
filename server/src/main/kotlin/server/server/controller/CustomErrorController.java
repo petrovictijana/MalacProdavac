@@ -6,10 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import server.server.dtos.response.PibAlreadyExistsResponse;
 import server.server.errors.ErrorResponse;
-import server.server.exceptions.EmailUsernameAlreadyTakenException;
-import server.server.exceptions.InvalidLoginCredentialsException;
-import server.server.exceptions.InvalidRoleException;
-import server.server.exceptions.PibAlreadyTakenException;
+import server.server.exceptions.*;
 
 @ControllerAdvice
 public class CustomErrorController {
@@ -83,5 +80,42 @@ public class CustomErrorController {
                         .data(invalidLoginCredentialsException.getLoginFailedResponse())
                         .build(), status
         );
+    }
+
+    @ExceptionHandler(InvalidProductIdException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidProductIdException(Exception e){
+        InvalidProductIdException invalidProductIdException = (InvalidProductIdException) e;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        return new ResponseEntity<>( ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message(e.getMessage())
+                .data(null)
+                .build(), status);
+    }
+
+    @ExceptionHandler(InvalidSellerIdException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSellerIdException(Exception e){
+        InvalidSellerIdException invalidSellerIdException = (InvalidSellerIdException) e;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>( ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message(e.getMessage())
+                .data(null)
+                .build(), status);
+    }
+
+    @ExceptionHandler(InvalidSearchException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidSearchException(Exception e){
+        InvalidSearchException invalidSearchException = (InvalidSearchException) e;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>( ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message(e.getMessage())
+                .data(null)
+                .build(), status);
     }
 }

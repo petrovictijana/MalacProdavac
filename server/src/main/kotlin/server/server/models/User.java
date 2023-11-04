@@ -38,7 +38,7 @@ public class User{
     private String password;
 
     @NotNull(message = "Morate uneti email")
-    @Email(message = "Morate uneti validnu email adresu", regexp = ".+@.+\\..+")
+    @Email(message = "Morate uneti validnu email adresu", regexp = "([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})")
     private String email;
 
     @Lob

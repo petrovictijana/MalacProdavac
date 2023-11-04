@@ -2,11 +2,11 @@
     INSERT IGNORE INTO role (role_id,name) VALUES (2,'Deliverer');
     INSERT IGNORE INTO role (role_id,name) VALUES (3,'Seller');
 
-    INSERT IGNORE INTO category (category_id,name) VALUES (1,'Sveze meso');
-    INSERT IGNORE INTO category (category_id,name) VALUES (2,'Jaja');
-    INSERT IGNORE INTO category (category_id,name) VALUES (3,'Mlecni prozivodi');
-    INSERT IGNORE INTO category (category_id,name) VALUES (4,'Voce');
-    INSERT IGNORE INTO category (category_id,name) VALUES (5,'Povrce');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (1,'Sveze meso','aa');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (2,'Jaja','aaaa');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (3,'Mlecni prozivodi','aaaa');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (4,'Voce','aaaaaaaa');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (5,'Povrce','aaaaa');
 
     INSERT IGNORE INTO measurement (measurement_id,name) VALUES (1,'bottle');
     INSERT IGNORE INTO measurement (measurement_id,name) VALUES (2,'liter');
@@ -65,4 +65,12 @@
     INSERT IGNORE INTO purchase_order (order_id, product_id, quantity) VALUES (8, 4, 2);
     INSERT IGNORE INTO purchase_order (order_id, product_id, quantity) VALUES (9, 5, 1);
 
+INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurment_id, seller_id) VALUES (1,'Sveze i ukusno','aaa',200,'Jabuke',4,4,3);
+INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurment_id, seller_id) VALUES (2,'Sveze i ukusno','aaa',250,'Jaja',2,3,3);
+INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurment_id, seller_id) VALUES (3,'Sveze i ukusno','aaa',290,'Kruske',4,4,3);
+INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurment_id, seller_id) VALUES (4,'Sveze i ukusno','aaa',300,'Jagode',4,4,3);
+
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (1,null,5,'Vrlo dobar proizvod',1,2);
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (2,null,4,'Zadovoljan sam proizvodom',3,1);
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (3,null,3,'Prosli put su bile bolje',1,2);
 
