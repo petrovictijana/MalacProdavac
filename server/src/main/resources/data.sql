@@ -25,10 +25,10 @@ INSERT IGNORE INTO category (category_id,name,picture) VALUES (8,'Namazi','namaz
     INSERT IGNORE INTO users (name,surname,username,password,email,picture,role_id) VALUES ('Igor','Nikodijevic','nikodijevici','$2a$10$d7.XTG9OY7CT7CJCB9b4g.UO0hQleGv/oy2FQDpgXW8jreunTAh0m','nikodijevicikg@gmail.com','tttt',3);
 
 
-    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (3,'103920327','Crkvinska 2',20.87, 43.94);
-    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (4,'159554583','Tanaska Rajica 12',45.2, 41.9);
-    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (5,'856235485','Filipa Visnjica 55',42.2, 45.5);
-    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (7,'951485315','Ljubomira Jovanovica 70',37.9, 45.5);
+    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (3,'103920327','Crkvinska 2', 43.944544, 20.872520);
+    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (4,'159554583','Tanaska Rajica 12', 44.653996, 20.263756);
+    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (5,'856235485','Filipa Visnjica 55', 44.277296, 19.914113);
+    INSERT IGNORE INTO sellers (seller_id,pib,address,latitude,longitude) VALUES (7,'951485315','Ljubomira Jovanovica 70',43.641911, 20.915729);
 
 
     INSERT IGNORE INTO deliverers (deliverer_id,location,latitude,longitude) VALUES (2,'Kragujevac',20.90,44.02);
