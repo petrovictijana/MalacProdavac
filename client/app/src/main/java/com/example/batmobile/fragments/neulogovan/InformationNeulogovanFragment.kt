@@ -1,13 +1,20 @@
 package com.example.batmobile.fragments.neulogovan
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.example.batmobile.R
 
 class InformationNeulogovanFragment : Fragment() {
@@ -52,6 +59,7 @@ class InformationNeulogovanFragment : Fragment() {
             prikaziCetvrtuInformaciju()
             promeniBojuDugmeta(dugme4)}
 
+        dugme1.performClick()
         return view
     }
 
@@ -81,6 +89,7 @@ class InformationNeulogovanFragment : Fragment() {
         drugaInformacija.visibility = View.GONE
         trecaInformacija.visibility = View.GONE
         cetvrtaInformacija.visibility = View.VISIBLE
+        setColorForRegistrujSe()
     }
 
     private fun promeniBojuDugmeta(dugme: Button) {
@@ -96,5 +105,19 @@ class InformationNeulogovanFragment : Fragment() {
         dugme.setBackgroundResource(R.drawable.full_fill_button)
         dugme.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
+    }
+    @SuppressLint("ResourceAsColor")
+    fun setColorForRegistrujSe() {
+        val text = "Mala proizvodnja velika zajednica. Postani i ti deo iste - Registruj se"
+        val spannableString = SpannableString(text)
+        val startIndex = text.indexOf("Registruj se")
+        val endIndex = startIndex + "Registruj se".length
+
+        val orangeColor = ContextCompat.getColor(requireContext(), R.color.orange)
+
+        spannableString.setSpan(ForegroundColorSpan(orangeColor), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        val textView = view.findViewById<TextView>(R.id.ponuda_za_registraciju)
+        textView.text = spannableString
     }
 }

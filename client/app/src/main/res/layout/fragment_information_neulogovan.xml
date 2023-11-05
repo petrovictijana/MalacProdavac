@@ -18,16 +18,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/balsamiq_sans"
-            android:paddingLeft="2dp"
-            android:paddingTop="10dp"
-            android:paddingRight="54dp"
-            android:paddingBottom="10dp"
+            android:paddingLeft="22dp"
+            android:paddingTop="27dp"
             android:text="O Aplikaciji"
             android:textColor="@color/black"
             android:textSize="25sp"
             tools:layout_editor_absoluteX="61dp"
-            tools:layout_editor_absoluteY="16dp"
-            android:layout_marginLeft="20dp"/>
+            tools:layout_editor_absoluteY="16dp"/>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -39,7 +36,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingRight="10dp"
                 tools:ignore="MissingConstraints"
                 android:layout_margin="10dp">
 
@@ -50,10 +46,10 @@
                     android:background="@drawable/empty_button"
                     android:fontFamily="@font/inter"
                     android:textColor="@color/black"
-                    android:paddingLeft="54dp"
-                    android:paddingTop="12dp"
-                    android:paddingRight="54dp"
-                    android:paddingBottom="12dp"
+                    android:paddingLeft="23dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="23dp"
+                    android:paddingBottom="3dp"
                     android:text="Dobrodošli"
                     android:textAllCaps="false"
                     android:textSize="15dp"
@@ -71,10 +67,10 @@
                     android:fontFamily="@font/inter"
                     android:textColor="@color/black"
                     android:layout_marginLeft="10dp"
-                    android:paddingLeft="54dp"
-                    android:paddingTop="12dp"
-                    android:paddingRight="54dp"
-                    android:paddingBottom="12dp"
+                    android:paddingLeft="23dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="23dp"
+                    android:paddingBottom="3dp"
                     android:text="Kako radi naša aplikacija?"
                     android:textAllCaps="false"
                     android:textSize="15dp"
@@ -92,10 +88,10 @@
                     android:fontFamily="@font/inter"
                     android:textColor="@color/black"
                     android:layout_marginLeft="10dp"
-                    android:paddingLeft="54dp"
-                    android:paddingTop="12dp"
-                    android:paddingRight="54dp"
-                    android:paddingBottom="12dp"
+                    android:paddingLeft="23dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="23dp"
+                    android:paddingBottom="3dp"
                     android:text="Zašto koristite našu aplikaciju?"
                     android:textAllCaps="false"
                     android:textSize="15dp"
@@ -113,10 +109,10 @@
                     android:fontFamily="@font/inter"
                     android:textColor="@color/black"
                     android:layout_marginLeft="10dp"
-                    android:paddingLeft="54dp"
-                    android:paddingTop="12dp"
-                    android:paddingRight="54dp"
-                    android:paddingBottom="12dp"
+                    android:paddingLeft="23dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="23dp"
+                    android:paddingBottom="3dp"
                     android:text="Kako se pridružiti našoj zajednici?"
                     android:textAllCaps="false"
                     android:textSize="15dp"
@@ -359,6 +355,6 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

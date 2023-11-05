@@ -37,4 +37,15 @@
         app:mbn_rippleColor="@color/grey"
         app:mbn_selectedIconColor="@color/black"
         app:mbn_shadowColor="@color/light_grey" />
+
+    <ImageView
+        android:id="@+id/voceSlika"
+        android:layout_width="283dp"
+        android:layout_height="278dp"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginBottom="25dp"
+        android:contentDescription="background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/voce" />
 </androidx.constraintlayout.widget.ConstraintLayout>
