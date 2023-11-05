@@ -1,4 +1,4 @@
-package com.example.batmobile.fragments
+package com.example.batmobile.fragments.registracija
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

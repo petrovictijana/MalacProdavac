@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/registerFragment_inputs"
-        android:name="com.example.batmobile.fragments.RegisterFragment_inputs"
+        android:name="com.example.batmobile.fragments.registracija.RegisterFragment_inputs"
         android:label="fragment_register_inputs"
         tools:layout="@layout/fragment_register_inputs" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment_step2"
-        android:name="com.example.batmobile.fragments.RegisterFragment_step2"
+        android:name="com.example.batmobile.fragments.registracija.RegisterFragment_step2"
         android:label="fragment_register_step2"
         tools:layout="@layout/fragment_register_step2" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment_step3"
-        android:name="com.example.batmobile.fragments.RegisterFragment_step3"
+        android:name="com.example.batmobile.fragments.registracija.RegisterFragment_step3"
         android:label="RegisterFragment_step3" >
         <action
             android:id="@+id/navigate_step3ToStep2"
