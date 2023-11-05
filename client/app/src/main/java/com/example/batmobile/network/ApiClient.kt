@@ -164,19 +164,12 @@ class ApiClient(private val context: Context): ApiInterface {
         onSuccess: (String) -> Unit,
         onError: (VolleyError) -> Unit
     ){
-        val request = object : StringRequest(
+        val request = StringRequest(
             Request.Method.GET,
             url,
-            { response -> onSuccess(response) },
+            { response -> onSuccess(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8)) },
             { error -> onError(error) }
         )
-        {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-Type"] = "application/json; charset=utf-8"
-                return headers
-            }
-        }
         queue.add(request)
     }
 
