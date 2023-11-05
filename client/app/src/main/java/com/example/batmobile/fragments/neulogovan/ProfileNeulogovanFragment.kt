@@ -1,10 +1,11 @@
-package com.example.batmobile
+package com.example.batmobile.fragments.neulogovan
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.batmobile.R
 
 class ProfileNeulogovanFragment : Fragment() {
     override fun onCreateView(

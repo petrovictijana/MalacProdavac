@@ -1,4 +1,4 @@
-package com.example.batmobile.fragments
+package com.example.batmobile.fragments.registracija
 
 import android.content.pm.PackageManager
 import android.os.Bundle

@@ -7,62 +7,42 @@
 
     <fragment
         android:id="@+id/informationNeulogovanFragment"
-        android:name="com.example.batmobile.InformationNeulogovanFragment"
+        android:name="com.example.batmobile.fragments.neulogovan.InformationNeulogovanFragment"
         android:label="fragment_information_neulogovan"
-        tools:layout="@layout/fragment_information_neulogovan" >
-        <action
-            android:id="@+id/action_informationNeulogovanFragment_to_profileNeulogovanFragment"
-            app:destination="@id/profileNeulogovanFragment" />
-        <action
-            android:id="@+id/action_informationNeulogovanFragment_to_exploreNeulogovanFragment"
-            app:destination="@id/exploreNeulogovanFragment" />
-        <action
-            android:id="@+id/action_informationNeulogovanFragment_to_homeNeuloganFragment"
-            app:destination="@id/homeNeuloganFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_information_neulogovan" />
     <fragment
         android:id="@+id/profileNeulogovanFragment"
-        android:name="com.example.batmobile.ProfileNeulogovanFragment"
+        android:name="com.example.batmobile.fragments.neulogovan.ProfileNeulogovanFragment"
         android:label="fragment_profile_neulogovan"
-        tools:layout="@layout/fragment_profile_neulogovan" >
-        <action
-            android:id="@+id/action_profileNeulogovanFragment_to_informationNeulogovanFragment"
-            app:destination="@id/informationNeulogovanFragment" />
-        <action
-            android:id="@+id/action_profileNeulogovanFragment_to_exploreNeulogovanFragment"
-            app:destination="@id/exploreNeulogovanFragment" />
-        <action
-            android:id="@+id/action_profileNeulogovanFragment_to_homeNeuloganFragment"
-            app:destination="@id/homeNeuloganFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_profile_neulogovan" />
     <fragment
         android:id="@+id/homeNeuloganFragment"
-        android:name="com.example.batmobile.HomeNeuloganFragment"
+        android:name="com.example.batmobile.fragments.neulogovan.HomeNeuloganFragment"
         android:label="fragment_home_neulogan"
-        tools:layout="@layout/fragment_home_neulogan" >
-        <action
-            android:id="@+id/action_homeNeuloganFragment_to_exploreNeulogovanFragment"
-            app:destination="@id/exploreNeulogovanFragment" />
-        <action
-            android:id="@+id/action_homeNeuloganFragment_to_informationNeulogovanFragment"
-            app:destination="@id/informationNeulogovanFragment" />
-        <action
-            android:id="@+id/action_homeNeuloganFragment_to_profileNeulogovanFragment"
-            app:destination="@id/profileNeulogovanFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home_neulogan" />
     <fragment
         android:id="@+id/exploreNeulogovanFragment"
-        android:name="com.example.batmobile.ExploreNeulogovanFragment"
+        android:name="com.example.batmobile.fragments.neulogovan.ExploreNeulogovanFragment"
         android:label="fragment_explore_neulogovan"
-        tools:layout="@layout/fragment_explore_neulogovan" >
-        <action
-            android:id="@+id/action_exploreNeulogovanFragment_to_informationNeulogovanFragment"
-            app:destination="@id/informationNeulogovanFragment" />
-        <action
-            android:id="@+id/action_exploreNeulogovanFragment_to_profileNeulogovanFragment"
-            app:destination="@id/profileNeulogovanFragment" />
-        <action
-            android:id="@+id/action_exploreNeulogovanFragment_to_homeNeuloganFragment"
-            app:destination="@id/homeNeuloganFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_explore_neulogovan" />
+    <action
+        android:id="@+id/action_HomeNeulogovanFragment"
+        app:destination="@id/homeNeuloganFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_ExploreNeulogovanFragment"
+        app:destination="@id/exploreNeulogovanFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_ProfileNeulogovanFragment"
+        app:destination="@id/profileNeulogovanFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+    <action
+        android:id="@+id/action_InformationNeulogovanFragment"
+        app:destination="@id/informationNeulogovanFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.batmobile.fragments
+package com.example.batmobile.fragments.registracija
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,15 +11,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.Navigation
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.example.batmobile.services.Authenticate
 import org.json.JSONObject
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
 import com.example.batmobile.R
 import com.example.batmobile.activities.LoginActivity
 import com.example.batmobile.viewModels.UserViewModel
