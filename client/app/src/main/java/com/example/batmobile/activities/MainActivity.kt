@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goToUnloggedUser(view: View){
-        val intent: Intent = Intent(this, MenuActivity::class.java)
+        val intent: Intent = Intent(this, NeulogovanActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -52,4 +52,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.etebarian:meow-bottom-navigation:1.2.0")
+    implementation ("com.google.code.gson:gson:2.8.9")
 }

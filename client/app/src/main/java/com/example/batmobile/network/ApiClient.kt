@@ -14,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import java.lang.reflect.Method
 import java.nio.charset.Charset
 
 class ApiClient(private val context: Context): ApiInterface {
@@ -158,4 +159,25 @@ class ApiClient(private val context: Context): ApiInterface {
             errorCallback()
         }
     }
+    override fun sendGetRequestEmpty(
+        url: String,
+        onSuccess: (String) -> Unit,
+        onError: (VolleyError) -> Unit
+    ){
+        val request = object : StringRequest(
+            Request.Method.GET,
+            url,
+            { response -> onSuccess(response) },
+            { error -> onError(error) }
+        )
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json; charset=utf-8"
+                return headers
+            }
+        }
+        queue.add(request)
+    }
+
 }

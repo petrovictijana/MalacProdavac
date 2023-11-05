@@ -19,8 +19,11 @@ interface ApiInterface {
         onSuccess: (String) -> Unit,
         onError: (VolleyError) -> Unit
     )
-
-
+    fun sendGetRequestEmpty(
+        url: String,
+        onSuccess: (String) -> Unit,
+        onError: (VolleyError) -> Unit
+    )
     fun getCoordinatesForAddress(address:       String,
                                  callback:      (Double, Double) -> Unit,
                                  errorCallback: () -> Unit)

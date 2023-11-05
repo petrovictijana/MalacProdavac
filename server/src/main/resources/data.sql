@@ -2,11 +2,14 @@
     INSERT IGNORE INTO role (role_id,name) VALUES (2,'Deliverer');
     INSERT IGNORE INTO role (role_id,name) VALUES (3,'Seller');
 
-INSERT IGNORE INTO category (category_id,name,picture) VALUES (1,'Sveze meso','aa');
-INSERT IGNORE INTO category (category_id,name,picture) VALUES (2,'Jaja','aaaa');
-INSERT IGNORE INTO category (category_id,name,picture) VALUES (3,'Mlecni prozivodi','aaaa');
-INSERT IGNORE INTO category (category_id,name,picture) VALUES (4,'Voce','aaaaaaaa');
-INSERT IGNORE INTO category (category_id,name,picture) VALUES (5,'Povrce','aaaaa');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (1,'Mlečni proizvodi','melcni_proizvodi.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (2,'Voće i povrće','voce_i_povrce.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (3,'Mesne prerađevine','mesne_prerađevine.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (4,'Sveže meso','sveze_meso.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (5,'Žitarice','zitarice.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (6,'Napici','napici.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (7,'Biljna ulja','biljna_ulja.jpg');
+INSERT IGNORE INTO category (category_id,name,picture) VALUES (8,'Namazi','namazi.jpg');
 
     INSERT IGNORE INTO measurement (measurement_id,name) VALUES (1,'bottle');
     INSERT IGNORE INTO measurement (measurement_id,name) VALUES (2,'liter');

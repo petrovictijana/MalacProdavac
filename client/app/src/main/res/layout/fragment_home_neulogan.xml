@@ -4,17 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.neulogovan.HomeNeuloganFragment">
+    tools:context=".fragments.neulogovan.HomeNeuloganFragment"
+    android:paddingLeft="22dp"
+    android:paddingRight="22dp"
+    android:paddingTop="27dp"
+    >
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HOME neulogovan"
-        android:textColor="@color/orange"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/balsamiq_sans"
+        android:text="Malac Prodavac"
+        android:textAppearance="@style/text_shadow"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/input"
+        android:drawableLeft="@drawable/explore"
+        android:drawablePadding="15dp"
+        android:ems="10"
+        android:inputType="text"
+        android:paddingLeft="11dp"
+        android:paddingTop="11dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="11dp"
+        android:text="Pretraži proizvode ili prodavce"
+        android:textColor="@color/grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/full_fill_button_dark_blue"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingTop="15dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="200dp" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="115dp"
+                android:layout_height="101dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/amico" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ponuda_za_registraciju"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="4dp"
+                android:text="Mala proizvodnja velika zajednica. Postani i ti deo iste - Registruj se"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                tools:ignore="TextSizeCheck" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:text="Kategorije proizvoda"
+        android:textColor="@color/black"
+        android:fontFamily="@font/inter_medium"
+        android:textSize="18sp"
+        android:textAppearance="@style/text_shadow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+    <LinearLayout
+        android:id="@+id/products_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView18">
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
