@@ -53,4 +53,5 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.etebarian:meow-bottom-navigation:1.2.0")
     implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("com.makeramen:roundedimageview:2.3.0")
 }

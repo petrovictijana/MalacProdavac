@@ -27,8 +27,9 @@ class HomeNeuloganFragment : Fragment() {
     private lateinit var view: View
     private lateinit var apiClient: ApiClient
 
-    private lateinit var container_category_products: LinearLayout
-    private lateinit var horizontal_top_seller: HorizontalScrollView
+    private lateinit var container_category_products:   LinearLayout
+    private lateinit var horizontal_top_seller:         HorizontalScrollView
+    private lateinit var horizontal_top_products:       HorizontalScrollView
 
     @SuppressLint("ResourceAsColor")
     fun setColorForRegistrujSe() {
@@ -47,8 +48,9 @@ class HomeNeuloganFragment : Fragment() {
 
     fun getAllStuff(){
         apiClient = ApiClient(requireContext())
-        container_category_products = view.findViewById<LinearLayout>(R.id.products_category)
-        horizontal_top_seller = view.findViewById<HorizontalScrollView>(R.id.top_sellers)
+        container_category_products =   view.findViewById<LinearLayout>(R.id.products_category)
+        horizontal_top_seller       =   view.findViewById<HorizontalScrollView>(R.id.top_sellers)
+        horizontal_top_products     =   view.findViewById<HorizontalScrollView>(R.id.top_products)
     }
 
     fun getCategoryProducts(){
@@ -80,7 +82,7 @@ class HomeNeuloganFragment : Fragment() {
             }
         )
     }
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,6 +92,7 @@ class HomeNeuloganFragment : Fragment() {
 
         getAllStuff()
         setColorForRegistrujSe()
+        renderHorizontalTopProducts()
 
         getCategoryProducts()
         getTopSellers()
@@ -189,8 +192,12 @@ class HomeNeuloganFragment : Fragment() {
             itemView.layoutParams = itemLayoutParams
             row.addView(itemView)
         }
-
         horizontal_top_seller.addView(row)
+    }
+
+    fun renderHorizontalTopProducts(){
+        val itemView = layoutInflater.inflate(R.layout.component_top_product, null)
+        horizontal_top_products.addView(itemView)
     }
 
 }
