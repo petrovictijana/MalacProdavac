@@ -18,6 +18,7 @@ import com.example.batmobile.R
 import androidx.core.content.ContextCompat
 import com.example.batmobile.models.Category
 import com.example.batmobile.models.Seller
+import com.example.batmobile.models.TopProduct
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.google.gson.Gson
@@ -74,15 +75,28 @@ class HomeNeuloganFragment : Fragment() {
         apiClient.sendGetRequestEmpty(url,
             { response ->
                 var gson = Gson()
-                var categoryList = gson.fromJson(response, Array<Seller>::class.java).toList()
-                renderHorizontalTopSellers(categoryList)
+                var sellerList = gson.fromJson(response, Array<Seller>::class.java).toList()
+                renderHorizontalTopSellers(sellerList)
             },
             { error ->
                 println(error)
             }
         )
     }
-    
+    fun getTopProducts(){
+        var url:String = Config.ip_address+":"+ Config.port + "/top3/products"
+        println(url)
+        apiClient.sendGetRequestEmpty(url,
+            { response ->
+                var gson = Gson()
+                var productList = gson.fromJson(response, Array<TopProduct>::class.java).toList()
+                renderHorizontalTopProducts(productList)
+            },
+            { error ->
+                println(error)
+            }
+        )
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,10 +106,10 @@ class HomeNeuloganFragment : Fragment() {
 
         getAllStuff()
         setColorForRegistrujSe()
-        renderHorizontalTopProducts()
 
         getCategoryProducts()
         getTopSellers()
+        getTopProducts()
 
         return view
     }
@@ -195,9 +209,41 @@ class HomeNeuloganFragment : Fragment() {
         horizontal_top_seller.addView(row)
     }
 
-    fun renderHorizontalTopProducts(){
-        val itemView = layoutInflater.inflate(R.layout.component_top_product, null)
-        horizontal_top_products.addView(itemView)
+    fun renderHorizontalTopProducts(productList: List<TopProduct>){
+        var row: LinearLayout
+        row = LinearLayout(requireContext())
+        row.orientation = LinearLayout.HORIZONTAL
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        row.layoutParams = layoutParams
+
+        val marginInDp = 4
+        val marginInPx = (marginInDp * resources.displayMetrics.density).toInt()
+        val itemLayoutParams = LinearLayout.LayoutParams(
+            0,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            1f
+        )
+
+        for((index, product) in productList.withIndex()){
+            val itemView = layoutInflater.inflate(R.layout.component_top_product, null)
+                val product_name    = itemView.findViewById<TextView>(R.id.product_name)
+                val product_star    = itemView.findViewById<TextView>(R.id.product_star)
+                val product_seller  = itemView.findViewById<TextView>(R.id.product_seller)
+                val product_location = itemView.findViewById<TextView>(R.id.product_loaction)
+                product_name.text   = product.productName
+                product_star.text   = product.soldItems.toString()        //ZAMENITI
+                product_seller.text = product.sellerUsername
+                apiClient.getAddressFromCoordinates(requireContext(),product.latitude, product.longitude,
+                {response-> product_location.text = response }, {  })
+
+            itemLayoutParams.setMargins(marginInPx, (marginInDp), marginInPx, 0)
+            itemView.layoutParams = itemLayoutParams
+            row.addView(itemView)
+        }
+        horizontal_top_products.addView(row)
     }
 
 }

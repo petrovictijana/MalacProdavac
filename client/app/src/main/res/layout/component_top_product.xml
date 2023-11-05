@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/product_image">
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/product_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_medium"
@@ -50,11 +50,11 @@
             android:layout_height="18dp"
             android:layout_marginEnd="5dp"
             android:src="@drawable/star"
-            app:layout_constraintEnd_toStartOf="@+id/textView19"
+            app:layout_constraintEnd_toStartOf="@+id/product_star"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/product_star"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -73,10 +73,10 @@
             android:src="@drawable/seller"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
         <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/product_seller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
@@ -87,7 +87,7 @@
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView12"
-            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/product_name"
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
@@ -96,10 +96,10 @@
             android:layout_marginEnd="5dp"
             android:src="@drawable/location"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView21" />
+            app:layout_constraintEnd_toStartOf="@+id/product_loaction" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/product_loaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -110,8 +110,8 @@
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView20"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintStart_toEndOf="@+id/product_seller"
+            app:layout_constraintTop_toBottomOf="@+id/product_star" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
