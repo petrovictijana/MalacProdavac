@@ -19,7 +19,7 @@ class NeulogovanActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottomNavigation)
         bottomNavigation.show(1,true)
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.home))
-        bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.explore))
+        bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.explore_menu))
         bottomNavigation.add(MeowBottomNavigation.Model(3, R.drawable.inspect))
         bottomNavigation.add(MeowBottomNavigation.Model(4, R.drawable.profile))
     }
