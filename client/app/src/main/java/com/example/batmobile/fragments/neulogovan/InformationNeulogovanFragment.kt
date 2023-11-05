@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.example.batmobile.R
 
 class InformationNeulogovanFragment : Fragment() {
@@ -38,10 +39,18 @@ class InformationNeulogovanFragment : Fragment() {
         trecaInformacija = view.findViewById<LinearLayout>(R.id.trecaInformacija)
         cetvrtaInformacija = view.findViewById<LinearLayout>(R.id.cetvrtaInformacija)
 
-        dugme1.setOnClickListener { prikaziPrvuInformaciju() }
-        dugme2.setOnClickListener { prikaziDruguInformaciju() }
-        dugme3.setOnClickListener { prikaziTrecuInformaciju() }
-        dugme4.setOnClickListener { prikaziCetvrtuInformaciju() }
+        dugme1.setOnClickListener {
+            prikaziPrvuInformaciju()
+            promeniBojuDugmeta(dugme1)}
+        dugme2.setOnClickListener {
+            prikaziDruguInformaciju()
+            promeniBojuDugmeta(dugme2)}
+        dugme3.setOnClickListener {
+            prikaziTrecuInformaciju()
+            promeniBojuDugmeta(dugme3)}
+        dugme4.setOnClickListener {
+            prikaziCetvrtuInformaciju()
+            promeniBojuDugmeta(dugme4)}
 
         return view
     }
@@ -74,4 +83,18 @@ class InformationNeulogovanFragment : Fragment() {
         cetvrtaInformacija.visibility = View.VISIBLE
     }
 
+    private fun promeniBojuDugmeta(dugme: Button) {
+        dugme1.setBackgroundResource(R.drawable.empty_button)
+        dugme1.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        dugme2.setBackgroundResource(R.drawable.empty_button)
+        dugme2.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        dugme3.setBackgroundResource(R.drawable.empty_button)
+        dugme3.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        dugme4.setBackgroundResource(R.drawable.empty_button)
+        dugme4.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+        dugme.setBackgroundResource(R.drawable.full_fill_button)
+        dugme.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+    }
 }

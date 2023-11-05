@@ -154,12 +154,12 @@ class RegisterFragment_step3 : Fragment() {
             true -> {
                 passIsShow = false
                 password.setText(user.password)
-                eye.setImageResource(R.drawable.icons8_not_visible_96___)
+                eye.setImageResource(R.drawable.icons8_visible_96___)
             }
             false -> {
                 passIsShow = true
                 password.setText(changePasswordView(user.password))
-                eye.setImageResource(R.drawable.icons8_visible_96___)
+                eye.setImageResource(R.drawable.icons8_not_visible_96___)
             }
         }
     }
