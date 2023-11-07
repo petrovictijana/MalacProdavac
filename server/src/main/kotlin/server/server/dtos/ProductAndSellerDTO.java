@@ -7,15 +7,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SellerDTO {
+public class ProductAndSellerDTO {
+    private String productName;
+    private String picture;
+    private String description;
+    private double price;
+    private String category;
+    private String measurement;
     private String name;
     private String surname;
     private String username;
-    private String email;
-    private String picture;
-    private String pib;
-    private String adress;
+    private String pictureOfSeller;
     private double longitude;
     private double latitude;
-
 }
