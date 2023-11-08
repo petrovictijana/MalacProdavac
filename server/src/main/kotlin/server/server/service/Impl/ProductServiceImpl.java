@@ -18,10 +18,7 @@ import server.server.repository.ProductCommentRepository;
 import server.server.repository.ProductRepository;
 import server.server.service.ProductService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -47,24 +44,25 @@ public class ProductServiceImpl implements ProductService {
                 .measurement(product.get().getMeasurement().getName())
                 .description(product.get().getDescription())
                 .productName(product.get().getProductName())
-                .latitude(product.get().getSeller().getLatitude())
-                .longitude(product.get().getSeller().getLongitude())
-                .username(product.get().getSeller().getUser().getUsername())
-                .name(product.get().getSeller().getUser().getName())
-                .surname(product.get().getSeller().getUser().getSurname())
+                .sellerLatitude(product.get().getSeller().getLatitude())
+                .sellerLongitude(product.get().getSeller().getLongitude())
+                .sellerUsername(product.get().getSeller().getUser().getUsername())
+                .sellerName(product.get().getSeller().getUser().getName())
+                .sellerSurname(product.get().getSeller().getUser().getSurname())
                 .category(product.get().getCategory().getName())
                 .description(product.get().getDescription())
                 .build();
 
         List<ProductComment> productComments = productCommentRepository.findByProduct_ProductId(id);
+        List<CommentDTO> comments = new ArrayList<>();
 
         if(productComments.isEmpty()){
-            throw new InvalidProductIdException("Komenari za ovaj prozivod ne postoje");
+            ProductWithCommentsDTO productWithCommentsDTO = new ProductWithCommentsDTO(productAndSellerDTO,comments);
+            return new ResponseEntity<>(productWithCommentsDTO,HttpStatus.OK);
         }
 
         List<ProductComment> randomComments = getRandomComments(productComments);
 
-        List<CommentDTO> comments = new ArrayList<>();
         for (ProductComment p : randomComments) {
             CommentDTO commentDTO = CommentDTO.builder()
                     .date(p.getDate())
@@ -86,9 +84,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private List<ProductComment> getRandomComments(List<ProductComment> allComments) {
-        int numComments= Math.min(5, allComments.size()); // Ograničite na najviše 5 komentara
-        Collections.shuffle(allComments); // Nasumično pomiješajte komentare
-        return allComments.subList(0, numComments); // Odaberite prva tri do pet komentara
+
+        int numberOfCommentsForProduct = allComments.size();
+
+        int number;
+        Date date = new Date();
+
+        if(date.getDay()%2==0){
+            number = Math.min(3,numberOfCommentsForProduct);
+        }else {
+            number = Math.min(5,numberOfCommentsForProduct);
+        }
+
+        return allComments.subList(0,number);
     }
 
     @Override

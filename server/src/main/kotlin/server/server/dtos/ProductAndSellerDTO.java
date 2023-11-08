@@ -14,10 +14,10 @@ public class ProductAndSellerDTO {
     private double price;
     private String category;
     private String measurement;
-    private String name;
-    private String surname;
-    private String username;
+    private String sellerName;
+    private String sellerSurname;
+    private String sellerUsername;
     private String pictureOfSeller;
-    private double longitude;
-    private double latitude;
+    private double sellerLongitude;
+    private double sellerLatitude;
 }

@@ -29,8 +29,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ResponseEntity<?> searchProductsAndSellers(String query) {
         HashMap<String, List<?>> productsAndSellers = new HashMap<>();
-        List<Product> products = productRepository.findProductByProductName(query);
-        List<Seller> sellers = sellerRepository.findSellerByUser_Name(query);
+        List<Product> products = productRepository.searchProduct(query);
+        List<Seller> sellers = sellerRepository.searchSellers(query);
 
         if(!products.isEmpty()){
             List<ProductDTO> productDTOS = new ArrayList<>();
