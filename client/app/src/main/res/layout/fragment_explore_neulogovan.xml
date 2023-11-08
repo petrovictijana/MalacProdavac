@@ -47,7 +47,7 @@
             tools:ignore="TouchTargetSizeCheck" />
 
         <LinearLayout
-            android:id="@+id/products_category"
+            android:id="@+id/products_explore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
