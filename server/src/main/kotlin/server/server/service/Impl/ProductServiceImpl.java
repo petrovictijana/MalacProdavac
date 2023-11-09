@@ -1,14 +1,13 @@
 package server.server.service.Impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.server.dtos.CommentDTO;
-import server.server.dtos.ProductAndSellerDTO;
-import server.server.dtos.ProductWithCommentsDTO;
+import server.server.dtos.ProductDTO;
+import server.server.dtos.ProductSellerCommentDTO;
 import server.server.dtos.SellerDTO;
 import server.server.exceptions.InvalidProductIdException;
 import server.server.models.Product;
@@ -34,51 +33,58 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> product = productRepository.findById(id);
 
         if(product.isEmpty()){
-            throw new InvalidProductIdException("Ovakav proizvod ne postoji");
+            ProductDTO productDTO = null;
+            return new ResponseEntity<>(productDTO,HttpStatus.OK);
         }
 
-        ProductAndSellerDTO productAndSellerDTO = ProductAndSellerDTO.builder()
-                .pictureOfSeller(product.get().getSeller().getUser().getPicture())
-                .picture(product.get().getPicture())
-                .price(product.get().getPrice())
-                .measurement(product.get().getMeasurement().getName())
-                .description(product.get().getDescription())
+        ProductDTO productDTO = ProductDTO.builder()
                 .productName(product.get().getProductName())
-                .sellerLatitude(product.get().getSeller().getLatitude())
-                .sellerLongitude(product.get().getSeller().getLongitude())
-                .sellerUsername(product.get().getSeller().getUser().getUsername())
-                .sellerName(product.get().getSeller().getUser().getName())
-                .sellerSurname(product.get().getSeller().getUser().getSurname())
                 .category(product.get().getCategory().getName())
                 .description(product.get().getDescription())
+                .sellerName(product.get().getSeller().getUser().getName())
+                .price(product.get().getPrice())
+                .picture(product.get().getPicture())
+                .measurement(product.get().getMeasurement().getName())
                 .build();
+
+        SellerDTO sellerDTO = SellerDTO.builder()
+                .latitude(product.get().getSeller().getLatitude())
+                .longitude(product.get().getSeller().getLongitude())
+                .pib(product.get().getSeller().getPib())
+                .adress(product.get().getSeller().getAddress())
+                .surname(product.get().getSeller().getUser().getSurname())
+                .name(product.get().getSeller().getUser().getName())
+                .username(product.get().getSeller().getUser().getUsername())
+                .email(product.get().getSeller().getUser().getEmail())
+                .picture(product.get().getSeller().getUser().getPicture())
+                .build();
+
 
         List<ProductComment> productComments = productCommentRepository.findByProduct_ProductId(id);
         List<CommentDTO> comments = new ArrayList<>();
 
-        if(productComments.isEmpty()){
-            ProductWithCommentsDTO productWithCommentsDTO = new ProductWithCommentsDTO(productAndSellerDTO,comments);
-            return new ResponseEntity<>(productWithCommentsDTO,HttpStatus.OK);
+        if(!productComments.isEmpty()) {
+
+            List<ProductComment> randomComments = getRandomComments(productComments);
+
+            for (ProductComment p : randomComments) {
+                CommentDTO commentDTO = CommentDTO.builder()
+                        .date(p.getDate())
+                        .grade(p.getGrade())
+                        .text(p.getText())
+                        .name(p.getUser().getName())
+                        .surname(p.getUser().getSurname())
+                        .username(p.getUser().getUsername())
+                        .picture(p.getUser().getPicture())
+                        .build();
+
+                comments.add(commentDTO);
+            }
         }
 
-        List<ProductComment> randomComments = getRandomComments(productComments);
+        ProductSellerCommentDTO productSellerCommentDTO = new ProductSellerCommentDTO(sellerDTO,productDTO,comments);
 
-        for (ProductComment p : randomComments) {
-            CommentDTO commentDTO = CommentDTO.builder()
-                    .date(p.getDate())
-                    .grade(p.getGrade())
-                    .text(p.getText())
-                    .name(p.getUser().getName())
-                    .surname(p.getUser().getSurname())
-                    .username(p.getUser().getUsername())
-                    .picture(p.getUser().getPicture())
-                    .build();
-
-            comments.add(commentDTO);
-        }
-
-        ProductWithCommentsDTO productWithCommentsDTO = new ProductWithCommentsDTO(productAndSellerDTO,comments);
-        return new ResponseEntity<>(productWithCommentsDTO,HttpStatus.OK);
+        return new ResponseEntity<>(productSellerCommentDTO,HttpStatus.OK);
 
 
     }
@@ -109,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<?> getSellerByProductId(Long productId) {
         Seller seller = productRepository.findSellerByProductId(productId);
         if(seller == null){
-            throw new InvalidProductIdException("Ovakav proizvod ne postoji");
+            throw new InvalidProductIdException("Ovakav proizvodjac ne postoji");
         }
         return new ResponseEntity<>(SellerDTO.builder()
                 .name(seller.getUser().getName())
