@@ -49,7 +49,11 @@
         android:id="@+id/productViewFragment"
         android:name="com.example.batmobile.ProductViewFragment"
         android:label="fragment_product_view"
-        tools:layout="@layout/fragment_product_view" />
+        tools:layout="@layout/fragment_product_view" >
+        <argument
+            android:name="productId"
+            app:argType="integer" />
+    </fragment>
     <action
         android:id="@+id/action_ProductViewFragment"
         app:destination="@id/productViewFragment" />

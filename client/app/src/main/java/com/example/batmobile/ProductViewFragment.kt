@@ -22,6 +22,11 @@ class ProductViewFragment : Fragment() {
     ): View? {
         view = inflater.inflate(R.layout.fragment_product_view, container, false)
 
+        val args: ProductViewFragmentArgs = ProductViewFragmentArgs.fromBundle(requireArguments())
+        val productId = args.productId
+
+        println("Unutar fragmenta" + productId)
+
         getAllStuff()
 
         renderComments()    //kasnije pozovi u funkciji koja getuje komentare
