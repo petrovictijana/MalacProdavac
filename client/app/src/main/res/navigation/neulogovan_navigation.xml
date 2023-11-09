@@ -45,4 +45,12 @@
         app:destination="@id/informationNeulogovanFragment"
         app:enterAnim="@anim/nav_default_enter_anim"
         app:exitAnim="@anim/nav_default_exit_anim" />
+    <fragment
+        android:id="@+id/productViewFragment"
+        android:name="com.example.batmobile.ProductViewFragment"
+        android:label="fragment_product_view"
+        tools:layout="@layout/fragment_product_view" />
+    <action
+        android:id="@+id/action_ProductViewFragment"
+        app:destination="@id/productViewFragment" />
 </navigation>

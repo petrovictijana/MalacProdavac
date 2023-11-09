@@ -1,7 +1,6 @@
 package com.example.batmobile.fragments.neulogovan
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -16,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.batmobile.R
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.example.batmobile.models.Category
 import com.example.batmobile.models.Seller
 import com.example.batmobile.models.TopProduct
@@ -241,6 +241,9 @@ class HomeNeuloganFragment : Fragment() {
 
             itemLayoutParams.setMargins(marginInPx, (marginInDp), marginInPx, 0)
             itemView.layoutParams = itemLayoutParams
+            itemView.setOnClickListener{
+                Navigation.findNavController(view).navigate(R.id.action_ProductViewFragment)
+            }
             row.addView(itemView)
         }
         horizontal_top_products.addView(row)
