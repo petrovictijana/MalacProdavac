@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    Optional<Product> getProductById(Long id);
+    ResponseEntity<?> getProductById(Long id);
 
     List<Product> getProductByName(String name);
 

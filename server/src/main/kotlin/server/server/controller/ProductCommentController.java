@@ -19,7 +19,7 @@ public class ProductCommentController {
     @Autowired
     ProductCommentService productCommentService;
 
-    @GetMapping("/comments/{productId}")
+    @GetMapping("/getComments/{productId}")
     public  ResponseEntity<?> getAllCommentsForProduct(@PathVariable Long productId){
         return productCommentService.getProductCommentsByProductId(productId);
     }

@@ -36,6 +36,8 @@ public class SellerServiceImpl implements SellerService {
                 .email(seller.get().getUser().getEmail())
                 .picture(seller.get().getUser().getPicture())
                 .pib(seller.get().getPib())
-                .adress(seller.get().getAddress()).build(), HttpStatus.OK);
+                .adress(seller.get().getAddress())
+                .latitude(seller.get().getLatitude())
+                .longitude(seller.get().getLongitude()).build(), HttpStatus.OK);
     }
 }

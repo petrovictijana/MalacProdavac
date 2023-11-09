@@ -13,9 +13,9 @@ import java.util.List;
 public interface SellerRepository extends JpaRepository<Seller, Long> {
         Seller findByPib(String pib);
 
-      //  @Query("SELECT s FROM Seller s WHERE " +
-        //        "s.user.name LIKE CONCAT('%',:query, '%')")
-        //List<Seller> searchSellers(String query);
+       @Query("SELECT s FROM Seller s WHERE " +
+               "s.user.name LIKE CONCAT('%',:query, '%')"+
+               "Or s.user.username LIKE CONCAT('%', :query, '%')")
+       List<Seller> searchSellers(String query);
 
-        List<Seller> findSellerByUser_Name(String query);
 }
