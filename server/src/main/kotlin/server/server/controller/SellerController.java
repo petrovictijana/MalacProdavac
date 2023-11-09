@@ -19,7 +19,7 @@ public class SellerController {
     @Autowired
     SellerService sellerService;
 
-    @GetMapping("/seller/{id}")
+    @GetMapping("/getSeller/{id}")
     public ResponseEntity<?> getHouseholdById(@PathVariable Long id){
         return sellerService.getHouseholdById(id);
     }

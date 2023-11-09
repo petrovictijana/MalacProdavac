@@ -29,11 +29,16 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ResponseEntity<?> searchProductsAndSellers(String query) {
         HashMap<String, List<?>> productsAndSellers = new HashMap<>();
-        List<Product> products = productRepository.findProductByProductName(query);
-        List<Seller> sellers = sellerRepository.findSellerByUser_Name(query);
+        List<Product> products = productRepository.searchProduct(query);
+        List<Seller> sellers = sellerRepository.searchSellers(query);
+
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        productsAndSellers.put("products",productDTOS);
+
+        List<SellerDTO> sellerDTOS = new ArrayList<>();
+        productsAndSellers.put("seller",sellerDTOS);
 
         if(!products.isEmpty()){
-            List<ProductDTO> productDTOS = new ArrayList<>();
             for (Product p : products) {
                 ProductDTO productDTO = ProductDTO.builder()
                         .productName(p.getProductName())
@@ -47,11 +52,10 @@ public class SearchServiceImpl implements SearchService {
 
                 productDTOS.add(productDTO);
             }
-            productsAndSellers.put("products",productDTOS);
         }
 
+
         if(!sellers.isEmpty()){
-            List<SellerDTO> sellerDTOS = new ArrayList<>();
             for (Seller s : sellers) {
                 SellerDTO sellerDTO = SellerDTO.builder()
                         .name(s.getUser().getName())
@@ -64,11 +68,7 @@ public class SearchServiceImpl implements SearchService {
 
                 sellerDTOS.add(sellerDTO);
             }
-            productsAndSellers.put("sellers",sellerDTOS);
-        }
 
-        if(productsAndSellers.isEmpty()){
-            throw new InvalidSearchException("Nema ovakvog prozivoda ili proizvodjaca!");
         }
 
         return new ResponseEntity<>(productsAndSellers, HttpStatus.OK);

@@ -26,10 +26,6 @@ public class ProductCommentServiceImpl implements ProductCommentService {
     public ResponseEntity<?> getProductCommentsByProductId(Long productId) {
         List<ProductComment> productComments = productCommentRepository.findByProduct_ProductId(productId);
 
-        if(productComments.isEmpty()){
-            throw new InvalidProductIdException("Komenari za ovaj prozivod ne postoje");
-        }
-
         List<CommentDTO> comments = new ArrayList<>();
         for (ProductComment p : productComments) {
             CommentDTO commentDTO = CommentDTO.builder()

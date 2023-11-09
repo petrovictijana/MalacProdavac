@@ -20,17 +20,13 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products/{id}")
-    public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id){
-        Optional<Product> product = productService.getProductById(id);
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/getProduct/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable Long id){
+        return productService.getProductById(id);
+
     }
 
-    @GetMapping("/products/seller/{id}")
+    @GetMapping("/getSellerByProductId/{id}")
     public ResponseEntity<?> getSellerByProductId(@PathVariable Long id){
        return productService.getSellerByProductId(id);
     }
