@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("storage")
 @Component
 public class StorageProperties {
-    private String location;
+    private String location = "../resources/fileSystem";
 }
