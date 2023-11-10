@@ -29,22 +29,40 @@
 
     <TextView
         android:id="@+id/textProfile"
-        android:textColor="@color/orange"
-        android:layout_width="wrap_content"
+        android:textColor="@color/black"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="Kao neulogovani korisnik nemate profil."
+        android:text="Kao neulogovan korisnik nemate pristup svom profilu.
+                        Da biste kreirali svoj profil vratite se par koraka unazad i uživajte u svim pogodnostima naše aplikacije."
         android:fontFamily="@font/balsamiq_sans"
         android:textSize="15sp"
+        android:padding="5dp"
+        android:background="@drawable/empty_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="15dp"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="280dp"
+        android:layout_height="270dp"
+        android:layout_marginStart="66dp"
+        android:layout_marginEnd="66dp"
+        android:contentDescription="pana"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/optionsInformationNeulogovan"
+        app:srcCompat="@drawable/pana" />
 
     <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/full_fill_button"
         android:elevation="4dp"
         android:fontFamily="@font/balsamiq_sans"
@@ -60,7 +78,6 @@
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textProfile"
-        tools:ignore="TouchTargetSizeCheck"
-        android:layout_marginTop="10dp"/>
+        tools:ignore="TouchTargetSizeCheck,TextSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
