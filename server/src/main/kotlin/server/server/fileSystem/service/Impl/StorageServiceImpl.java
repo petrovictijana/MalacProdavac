@@ -12,10 +12,7 @@ import server.server.fileSystem.utilities.ImageType;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 
 @Service
 public class StorageServiceImpl implements StorageService {
@@ -37,7 +34,7 @@ public class StorageServiceImpl implements StorageService {
         if(!FolderUtility.isFolderEmpty(path))
             FolderUtility.deleteFolderContent(path);
 
-        Path destinationFile = path.resolve("image");
+        Path destinationFile = path.resolve(multipartFile.getOriginalFilename());
         try {
             Files.copy(multipartFile.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -48,28 +45,24 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Path getFileLocation(String identificationString, String filename, ImageType imageType) {
+    public Path getFileLocation(String identificationString, ImageType imageType) {
         System.out.println("Metoda generateFolderPath(identificationString, imageType): " + generateFolderPath(identificationString, imageType));
-        Path path = Paths.get(generalPath + generateFolderPath(identificationString, imageType) + "/" + filename);
-
-        return path.resolve(filename);
+        return Paths.get(generalPath + generateFolderPath(identificationString, imageType) + "/");
     }
 
     @Override
-    public Resource loadImageAsResource(String identificationString, String filename, ImageType imageType) {
-        Path path = getFileLocation(identificationString, filename, imageType);
+    public Resource loadImageAsResource(String identificationString, ImageType imageType) {
+        Path path = getFileLocation(identificationString, imageType);
         System.out.println("Putanja: " + path.toString());
-        try {
-            Resource resource = new UrlResource(path.toUri());
 
-            if(resource.exists() /*|| resource.isReadable()*/){
-                //Ukoliko postoji
-                return resource;
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
+            for (Path pathFile : directoryStream) {
+                Resource resource = new UrlResource(pathFile.toUri());
+                if (resource.exists())
+                    return resource;
             }
-            else{
-                throw new RuntimeException("Ne mozemo procitati file " + filename);
-            }
-        } catch (MalformedURLException e) {
+            throw new RuntimeException("Nema sta da se procita...");
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

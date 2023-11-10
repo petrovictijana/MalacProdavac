@@ -10,6 +10,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import server.server.fileSystem.service.StorageService;
 import server.server.fileSystem.utilities.ImageType;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @RestController
 @RequestMapping()
 public class FileSystemController {
@@ -34,14 +37,41 @@ public class FileSystemController {
     }
 
     @GetMapping("user/profile-picture")
-    public ResponseEntity<Resource> getImage(@RequestParam("username") String username,
-                                             @RequestParam("filename") String filename){
-        Resource file = storageService.loadImageAsResource(username, filename, ImageType.USER);
+    public ResponseEntity<Resource> getImage(@RequestParam("username") String username){
+        Resource file = storageService.loadImageAsResource(username, ImageType.USER);
+        System.out.println("Filename: " + file.getFilename().toString());
 
         if(file == null)
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        String contentType = determineImageContentType(file.getFilename());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                //.header(HttpHeaders.CONTENT_TYPE, contentType)
+                .body(file);
+    }
+
+    // Pomoćna metoda za određivanje Content-Type na osnovu ekstenzije fajla
+    private String determineImageContentType(String filename) {
+        Path path = Paths.get(filename);
+        String extension = getExtension(path);
+
+        if ("png".equalsIgnoreCase(extension)) {
+            return "image/png";
+        } else if ("jpg".equalsIgnoreCase(extension) || "jpeg".equalsIgnoreCase(extension)) {
+            return "image/jpeg";
+        }
+        // Dodajte druge tipove slika prema potrebi
+        return "application/octet-stream"; // Fallback vrednost ako tip slike nije prepoznat
+    }
+
+    // Metoda za dobijanje ekstenzije fajla
+    private String getExtension(Path path) {
+        String filename = path.getFileName().toString();
+        int dotIndex = filename.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < filename.length() - 1) {
+            return filename.substring(dotIndex + 1).toLowerCase();
+        }
+        return "";
     }
 }
