@@ -5,10 +5,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
-@ConfigurationProperties("storage")
-@Component
+//@Getter
+//@Setter
+//@ConfigurationProperties("storage")
+//@Component
 public class StorageProperties {
-    private String location = "../resources/fileSystem";
+    private String location = "../resources/fileSystem/";
 }
