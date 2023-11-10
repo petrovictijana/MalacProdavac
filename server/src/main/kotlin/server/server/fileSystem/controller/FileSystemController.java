@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import server.server.fileSystem.MyResponse;
 import server.server.fileSystem.service.StorageService;
+import server.server.fileSystem.utilities.FolderUtility;
 import server.server.fileSystem.utilities.ImageType;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -37,7 +40,7 @@ public class FileSystemController {
     }
 
     @GetMapping("user/profile-picture")
-    public ResponseEntity<Resource> getImage(@RequestParam("username") String username){
+    public ResponseEntity<?> getImage(@RequestParam("username") String username) throws IOException {
         Resource file = storageService.loadImageAsResource(username, ImageType.USER);
         System.out.println("Filename: " + file.getFilename().toString());
 
@@ -45,10 +48,18 @@ public class FileSystemController {
             return ResponseEntity.notFound().build();
 
         String contentType = determineImageContentType(file.getFilename());
+
+        MyResponse myResponse = MyResponse.builder()
+                .ime(username)
+                .image(FolderUtility.convertResourceToByteArray(file))
+                .build();
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                //.header(HttpHeaders.CONTENT_TYPE, contentType)
-                .body(file);
+                .body(myResponse);
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+//                .header(HttpHeaders.CONTENT_TYPE, contentType)
+//                .body(file);
     }
 
     // Pomoćna metoda za određivanje Content-Type na osnovu ekstenzije fajla

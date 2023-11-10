@@ -1,6 +1,10 @@
 package server.server.fileSystem.utilities;
 
+import org.springframework.core.io.Resource;
+import org.springframework.util.StreamUtils;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,4 +36,9 @@ public class FolderUtility {
         return true;
     }
 
+    public static byte[] convertResourceToByteArray(Resource resource) throws IOException {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return StreamUtils.copyToByteArray(inputStream);
+        }
+    }
 }

@@ -11,7 +11,6 @@ import server.server.fileSystem.utilities.FolderUtility;
 import server.server.fileSystem.utilities.ImageType;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.*;
 
 @Service
