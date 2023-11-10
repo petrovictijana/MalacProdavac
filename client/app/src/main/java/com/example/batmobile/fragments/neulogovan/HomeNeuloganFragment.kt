@@ -237,7 +237,7 @@ class HomeNeuloganFragment : Fragment() {
                 val product_seller  = itemView.findViewById<TextView>(R.id.product_seller)
                 val product_location = itemView.findViewById<TextView>(R.id.product_loaction)
                 product_name.text   = product.productName
-                product_star.text   = product.soldItems.toString()        //ZAMENITI
+                product_star.text   = product.soldItems.toString()  + "HC"       //ZAMENITI
                 product_seller.text = product.sellerUsername
                 apiClient.getAddressFromCoordinates(requireContext(),product.latitude, product.longitude,
                 {response-> product_location.text = response }, {  })
