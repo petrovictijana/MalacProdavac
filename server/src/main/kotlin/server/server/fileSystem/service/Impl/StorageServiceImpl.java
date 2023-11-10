@@ -23,14 +23,17 @@ public class StorageServiceImpl implements StorageService {
     private String generalPath;
 
     @Override
-    public int store(String username, MultipartFile multipartFile, ImageType imageType) {
-        String folderName = Base64Coder.encodeString("user" + "username");
+    public int store(String identificationString, MultipartFile multipartFile, ImageType imageType) {
         //Podesavanje putanje u zavisnosti od toga da li se slike cuvaju za user-a ili product-e
-        String folder = imageType == ImageType.USER ? "/users/" : "/products/";
-        String currentPath = generalPath + folder + folderName;
+        String folder = "";
+        if(imageType == ImageType.USER)
+            folder = "/users/" + Base64Coder.encodeString("user" + identificationString);
+        else if(imageType == ImageType.PRODUCT)
+            folder = "/products/" + Base64Coder.encodeString("product" + identificationString);
+
+        String currentPath = generalPath + folder;
 
         Path path = Paths.get(currentPath);
-
         if(!Files.exists(path)) {
             try {
                 Files.createDirectories(path);

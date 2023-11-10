@@ -27,10 +27,10 @@ public class FileSystemController {
     }
 
     @PostMapping("/product-picture-upload")
-    public int productPictureUpload(@RequestParam("username") String username,
+    public int productPictureUpload(@RequestParam("productId") Long productId,
                                     @RequestParam("file") MultipartFile multipartFile,
                                     RedirectAttributes redirectAttributes){
-        return storageService.store(username, multipartFile, ImageType.PRODUCT);
+        return storageService.store(String.valueOf(productId), multipartFile, ImageType.PRODUCT);
     }
 
     @GetMapping
