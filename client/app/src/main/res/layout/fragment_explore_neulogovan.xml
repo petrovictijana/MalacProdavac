@@ -46,16 +46,14 @@
             app:layout_constraintTop_toBottomOf="@+id/naslovIstrazi"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <LinearLayout
-            android:id="@+id/products_explore"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewExplore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search">
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/search" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,12 +11,16 @@ import com.example.batmobile.models.TopProduct
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.google.gson.Gson
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 class ExploreNeulogovanFragment : Fragment() {
 
     private lateinit var view: View
     private lateinit var apiClient: ApiClient
-    private lateinit var products_explore : LinearLayout
+    private lateinit var recyclerViewExplore : RecyclerView
+    private lateinit var layoutManager : GridLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,7 +28,11 @@ class ExploreNeulogovanFragment : Fragment() {
     ): View? {
         view = inflater.inflate(R.layout.fragment_explore_neulogovan, container, false)
         apiClient = ApiClient(requireContext())
-        products_explore = view.findViewById<LinearLayout>(R.id.products_explore)
+
+        recyclerViewExplore = view.findViewById(R.id.recyclerViewExplore)
+
+        layoutManager = GridLayoutManager(requireContext(), 3)
+        recyclerViewExplore.layoutManager = layoutManager
 
         getRandomProducts()
 
@@ -38,7 +46,7 @@ class ExploreNeulogovanFragment : Fragment() {
             { response ->
                 var gson = Gson()
                 var productList = gson.fromJson(response, Array<TopProduct>::class.java).toList()
-                renderHorizontalRandomProducts(productList)
+                renderRandomProducts(productList)
             },
             { error ->
                 println(error)
@@ -46,7 +54,43 @@ class ExploreNeulogovanFragment : Fragment() {
         )
     }
 
-    private fun renderHorizontalRandomProducts(productList: List<TopProduct>) {
+    private fun renderRandomProducts(productList: List<TopProduct>) {
+        var row: LinearLayout
+        row = LinearLayout(requireContext())
+        row.orientation = LinearLayout.HORIZONTAL
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        row.layoutParams = layoutParams
+        recyclerViewExplore.addView(row)
 
+        for ((index, product) in productList.withIndex()) {
+            if (index % 3 == 0 && index > 0) {
+                row = LinearLayout(requireContext())
+                row.orientation = LinearLayout.HORIZONTAL
+                val layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                row.layoutParams = layoutParams
+                recyclerViewExplore.addView(row)
+            }
+
+            val itemView = layoutInflater.inflate(R.layout.component_explore_product, null)
+
+            val marginInDp = 4
+            val marginInPx = (marginInDp * resources.displayMetrics.density).toInt()
+
+            val itemLayoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+            itemLayoutParams.setMargins(marginInPx, marginInPx, marginInPx, 0)
+
+            itemView.layoutParams = itemLayoutParams
+            row.addView(itemView)
+        }
     }
 }
