@@ -1,4 +1,4 @@
-package server.server.fileSystem;
+package server.server.fileSystem.utilities;
 
 import lombok.Getter;
 import lombok.Setter;
