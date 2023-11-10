@@ -33,9 +33,10 @@ public class FileSystemController {
         return storageService.store(String.valueOf(productId), multipartFile, ImageType.PRODUCT);
     }
 
-    @GetMapping
-    public ResponseEntity<Resource> getImage(@RequestParam("filename") String filename){
-        Resource file = storageService.loadImageAsResource(filename, ImageType.USER);
+    @GetMapping("user/profile-picture")
+    public ResponseEntity<Resource> getImage(@RequestParam("username") String username,
+                                             @RequestParam("filename") String filename){
+        Resource file = storageService.loadImageAsResource(username, filename, ImageType.USER);
 
         if(file == null)
             return ResponseEntity.notFound().build();

@@ -9,7 +9,7 @@ import java.nio.file.Path;
 public interface StorageService {
     int store(String username, MultipartFile multipartFile, ImageType imageType);
 
-    Path getAbsoluteFileLocation(String filename, ImageType imageType);
+    Path getFileLocation(String identificationString, String filename, ImageType imageType);
 
-    Resource loadImageAsResource(String filename, ImageType imageType);
+    Resource loadImageAsResource(String identificationString, String filename, ImageType imageType);
 }

@@ -25,15 +25,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public int store(String identificationString, MultipartFile multipartFile, ImageType imageType) {
         //Podesavanje putanje u zavisnosti od toga da li se slike cuvaju za user-a ili product-e
-        String folder = "";
-        if(imageType == ImageType.USER)
-            folder = "/users/" + Base64Coder.encodeString("user" + identificationString);
-        else if(imageType == ImageType.PRODUCT)
-            folder = "/products/" + Base64Coder.encodeString("product" + identificationString);
-
-        String currentPath = generalPath + folder;
-
-        Path path = Paths.get(currentPath);
+        Path path = Paths.get(generalPath + generateFolderPath(identificationString, imageType));
         if(!Files.exists(path)) {
             try {
                 Files.createDirectories(path);
@@ -45,7 +37,7 @@ public class StorageServiceImpl implements StorageService {
         if(!FolderUtility.isFolderEmpty(path))
             FolderUtility.deleteFolderContent(path);
 
-        Path destinationFile = path.resolve(multipartFile.getOriginalFilename());
+        Path destinationFile = path.resolve("image");
         try {
             Files.copy(multipartFile.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -56,21 +48,21 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public Path getAbsoluteFileLocation(String filename, ImageType imageType) {
-        generalPath += imageType == ImageType.USER ? "users/" : "products/";
+    public Path getFileLocation(String identificationString, String filename, ImageType imageType) {
+        System.out.println("Metoda generateFolderPath(identificationString, imageType): " + generateFolderPath(identificationString, imageType));
+        Path path = Paths.get(generalPath + generateFolderPath(identificationString, imageType) + "/" + filename);
 
-        Path path = Paths.get(generalPath);
         return path.resolve(filename);
     }
 
     @Override
-    public Resource loadImageAsResource(String filename, ImageType imageType) {
-        Path path = getAbsoluteFileLocation(filename, imageType);
-
+    public Resource loadImageAsResource(String identificationString, String filename, ImageType imageType) {
+        Path path = getFileLocation(identificationString, filename, imageType);
+        System.out.println("Putanja: " + path.toString());
         try {
             Resource resource = new UrlResource(path.toUri());
 
-            if(resource.exists() || resource.isReadable()){
+            if(resource.exists() /*|| resource.isReadable()*/){
                 //Ukoliko postoji
                 return resource;
             }
@@ -82,5 +74,13 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
+    private String generateFolderPath(String identificationString, ImageType imageType) {
+        String folder = "";
+        if(imageType == ImageType.USER)
+            folder = "/users/" + Base64Coder.encodeString("user" + identificationString);
+        else if(imageType == ImageType.PRODUCT)
+            folder = "/products/" + Base64Coder.encodeString("product" + identificationString);
 
+        return folder;
+    }
 }
