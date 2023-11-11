@@ -18,11 +18,14 @@ public class UserRegistrationRequest {
     private String username;
     private String password;
     private String email;
-    @Lob
-    private String image;
+
+    private byte[] picture;
+
     private String role;
+
     //Za dostavljaca
     private ArrayList<Long> licenceCategories;
+
     //Za prodavca
     private String pib;
     private double longitude;

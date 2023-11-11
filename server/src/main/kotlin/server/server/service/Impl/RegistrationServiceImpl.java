@@ -1,6 +1,7 @@
 package server.server.service.Impl;
 
 import lombok.SneakyThrows;
+import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +11,14 @@ import server.server.dtos.UserDTO;
 import server.server.dtos.request.UserRegistrationRequest;
 import server.server.dtos.response.EmailUsernameAvailabilityResponse;
 import server.server.enums.Roles;
+import server.server.errors.SuccessResponse;
 import server.server.exceptions.EmailUsernameAlreadyTakenException;
 import server.server.exceptions.InvalidRoleException;
 import server.server.exceptions.PibAlreadyTakenException;
+import server.server.fileSystem.CustomMultipartFile;
+import server.server.fileSystem.service.StorageService;
+import server.server.fileSystem.utilities.FolderUtility;
+import server.server.fileSystem.utilities.ImageType;
 import server.server.models.*;
 import server.server.repository.*;
 import server.server.service.RegistrationService;
@@ -29,6 +35,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     DelivererRepository delivererRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    StorageService storageService;
 
     @SneakyThrows
     @Override
@@ -72,7 +80,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .username(userRegistrationRequest.getUsername())
                 .password(BCrypt.hashpw(userRegistrationRequest.getPassword(), BCrypt.gensalt()))
                 .email(userRegistrationRequest.getEmail())
-                .picture(userRegistrationRequest.getImage())
                 .role(roleRepository.findById((long) (role.ordinal() + 1)).get())
                 .build();
 
@@ -83,6 +90,12 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new IllegalStateException("Cuvanje objekta nije uspeslo");
             //return new ResponseEntity<>("Dodavanje novog korisnika nije uspelo", HttpStatus.BAD_REQUEST);
         }
+
+        //Kreiran user, dodati njegovu fotografiju u fileSystem
+        storageService.store(createdUser.getUsername(),
+                             new CustomMultipartFile(userRegistrationRequest.getPicture()),
+                            ImageType.USER
+        );
 
         //Ukoliko je korisnik uspesno kreiran treba ga dodeliti u role
         if(role == Roles.DELIVERER){
@@ -129,13 +142,24 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
 
-        return new ResponseEntity<>(UserDTO.builder()
+
+        UserDTO userDTO = UserDTO.builder()
                 .name(createdUser.getName())
                 .surname(createdUser.getSurname())
                 .username(createdUser.getUsername())
                 .email(createdUser.getEmail())
-                .picture(createdUser.getPicture())
-                .role(createdUser.getRole().getName()).build(), HttpStatus.OK);
+                .picture(FolderUtility.convertResourceToByteArray(storageService.loadImageAsResource(
+                        createdUser.getUsername(),
+                        ImageType.USER
+                )))
+                .role(createdUser.getRole().getName()).build();
+
+        return new ResponseEntity<>(SuccessResponse.builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.name())
+                .success(true)
+                .message("User added successfully.")
+                .data(userDTO).build(), HttpStatus.OK);
     }
 
 
