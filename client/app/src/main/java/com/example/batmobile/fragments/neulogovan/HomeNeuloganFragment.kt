@@ -15,10 +15,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.batmobile.R
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.example.batmobile.ProductViewFragmentDirections
+import com.example.batmobile.fragments.ProductViewFragmentDirections
 import com.example.batmobile.models.Category
 import com.example.batmobile.models.Seller
 import com.example.batmobile.models.TopProduct
