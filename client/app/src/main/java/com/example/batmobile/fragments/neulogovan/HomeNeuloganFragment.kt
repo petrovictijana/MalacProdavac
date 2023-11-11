@@ -1,7 +1,6 @@
 package com.example.batmobile.fragments.neulogovan
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -16,6 +15,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.batmobile.R
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
+import com.example.batmobile.fragments.ProductViewFragmentDirections
 import com.example.batmobile.models.Category
 import com.example.batmobile.models.Seller
 import com.example.batmobile.models.TopProduct
@@ -234,13 +235,17 @@ class HomeNeuloganFragment : Fragment() {
                 val product_seller  = itemView.findViewById<TextView>(R.id.product_seller)
                 val product_location = itemView.findViewById<TextView>(R.id.product_loaction)
                 product_name.text   = product.productName
-                product_star.text   = product.soldItems.toString()        //ZAMENITI
+                product_star.text   = product.soldItems.toString()  + "HC"       //ZAMENITI
                 product_seller.text = product.sellerUsername
                 apiClient.getAddressFromCoordinates(requireContext(),product.latitude, product.longitude,
                 {response-> product_location.text = response }, {  })
 
             itemLayoutParams.setMargins(marginInPx, (marginInDp), marginInPx, 0)
             itemView.layoutParams = itemLayoutParams
+            itemView.setOnClickListener{
+                val action = ProductViewFragmentDirections.actionProductViewFragment(product.productId)
+                findNavController().navigate(action)
+            }
             row.addView(itemView)
         }
         horizontal_top_products.addView(row)

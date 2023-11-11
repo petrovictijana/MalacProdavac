@@ -73,7 +73,7 @@ INSERT IGNORE INTO products (product_id, description, picture, price, product_na
 INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurement_id, seller_id) VALUES (3,'Sveze i ukusno','aaa',290,'Kruske',4,4,3);
 INSERT IGNORE INTO products (product_id, description, picture, price, product_name, category_id, measurement_id, seller_id) VALUES (4,'Sveze i ukusno','aaa',300,'Jagode',4,4,3);
 
-INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (1,null,5,'Vrlo dobar proizvod',1,2);
-INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (2,null,4,'Zadovoljan sam proizvodom',3,1);
-INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (3,null,3,'Prosli put su bile bolje',1,2);
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (1,null,5,'Vrlo dobar proizvod',4,2);
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (2,null,4,'Zadovoljan sam proizvodom. Zadovoljan sam proizvodom',4,1);
+INSERT IGNORE INTO product_comment (product_comment_id,date, grade, text, product_id, user_id) VALUES (3,null,3,'Prosli put su bile bolje',5,2);
 

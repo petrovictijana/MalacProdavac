@@ -72,8 +72,6 @@ class Authenticate {
             }
             return true
         }
-
-        //  Ovo bi trebao neki servis da bude
         fun showPassword(view: View, input: EditText){
             val selectionStart = input.selectionStart
             val selectionEnd = input.selectionEnd
