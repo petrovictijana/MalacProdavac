@@ -11,16 +11,37 @@ import com.example.batmobile.R
 
 class Comments {
 
+
     companion object{
-        fun renderComments(product_comments: List<ProductComment>, row:LinearLayout ,activity: Activity, context: Context){
-            val marginInDp = 4
+
+        var marginInDp = 4
+        var itemLayoutParamsForHorizontal = LinearLayout.LayoutParams(
+            0,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            1f
+        )
+
+        var itemLayoutParamsForVertical = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+
+        fun renderComments(product_comments: List<ProductComment>, row:LinearLayout,type: String ,activity: Activity, context: Context){
             val marginInPx = (marginInDp * activity.resources.displayMetrics.density).toInt()
-            val itemLayoutParams = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                1f
-            )
-            itemLayoutParams.setMargins(marginInPx, (marginInDp+14), marginInPx, 0)
+            val itemLayoutParams : LinearLayout.LayoutParams;
+            if(type.equals("HORIZONTAL")){
+                itemLayoutParams = itemLayoutParamsForHorizontal
+                itemLayoutParams.setMargins(marginInPx, (marginInDp+14), marginInPx, 0)
+            }
+            else if(type.equals("VERTICAL")){
+                itemLayoutParams = itemLayoutParamsForVertical
+                itemLayoutParams.setMargins(0, (marginInDp+14), 0, 0)
+            }
+            else{
+                //default da je vertical
+                itemLayoutParams = itemLayoutParamsForVertical
+                itemLayoutParams.setMargins(0, (marginInDp+14), 0, 0)
+            }
 
             val widthInDp = 15
             val heightInDp = 15
@@ -54,6 +75,11 @@ class Comments {
                     comment_horizontal_star.addView(star)
                 }
                 itemView.layoutParams = itemLayoutParams
+                if(type.equals("VERTICAL")){
+                    val comment_text        = itemView.findViewById<TextView>(R.id.comment_comment)
+                    comment_text.maxLines   = Int.MAX_VALUE
+                    comment_text.ellipsize  = null
+                }
                 row.addView(itemView);
             }
         }

@@ -51,6 +51,8 @@ class ProductViewFragment : Fragment() {
     private lateinit var product_view_response:  ProductViewResponse
     private lateinit var seller_location    : String
 
+    private lateinit var list_of_comments   : List<ProductComment>
+
     fun getAllStuff(){
         apiClient = ApiClient(requireContext())
         horizontal_comments = view.findViewById<HorizontalScrollView>(R.id.horizontal_layout_comments)
@@ -133,10 +135,12 @@ class ProductViewFragment : Fragment() {
         row.layoutParams = layoutParams
         horizontal_comments.addView(row)
 
-        if(product_comments.size == 0)
-            no_comment.visibility = View.VISIBLE
+        if(product_comments.size == 0){
+            no_comment.visibility       = View.VISIBLE
+            more_comments.visibility    = View.GONE
+        }
         else
-            Comments.renderComments(product_comments, row, requireActivity(), requireContext())
+            Comments.renderComments(product_comments, row,"HORIZONTAL",requireActivity(), requireContext())
     }
 
     private fun showOverlayDialogForLocation() {
@@ -169,8 +173,45 @@ class ProductViewFragment : Fragment() {
         }
         clicked.setBackgroundResource(R.drawable.full_fill_button)
         clicked.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+        val resourceName = resources.getResourceEntryName(clicked.id)
+        println(resourceName)
+        when(resourceName){
+            "overlay_comments_button_all" -> {
+                row_in_all_comments.removeAllViews()
+                Comments.renderComments(list_of_comments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+            "overlay_comments_button_5"   -> {
+                row_in_all_comments.removeAllViews()
+                val filteredComments = list_of_comments.filter { it.grade == 5 }
+                Comments.renderComments(filteredComments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+            "overlay_comments_button_4"   -> {
+                row_in_all_comments.removeAllViews()
+                val filteredComments = list_of_comments.filter { it.grade == 4 }
+                Comments.renderComments(filteredComments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+            "overlay_comments_button_3"   -> {
+                row_in_all_comments.removeAllViews()
+                val filteredComments = list_of_comments.filter { it.grade == 3 }
+                Comments.renderComments(filteredComments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+            "overlay_comments_button_2"   -> {
+                row_in_all_comments.removeAllViews()
+                val filteredComments = list_of_comments.filter { it.grade == 2 }
+                Comments.renderComments(filteredComments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+            "overlay_comments_button_1"   -> {
+                row_in_all_comments.removeAllViews()
+                val filteredComments = list_of_comments.filter { it.grade == 1 }
+                Comments.renderComments(filteredComments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
+            }
+
+        }
+
     }
 
+    private lateinit var row_in_all_comments: LinearLayout
     private fun showOverlayDialogForMoreComments() {
 
         val dialog = Dialog(requireContext())
@@ -184,14 +225,14 @@ class ProductViewFragment : Fragment() {
 
         val overlay_closeButton         : ImageView      = dialog.findViewById<ImageView>(R.id.overlay_comments_close)
         val overlay_comments_button_all : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_all)
-        val overlay_comments_button_5 : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_5)
-        val overlay_comments_button_4 : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_4)
-        val overlay_comments_button_3 : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_3)
-        val overlay_comments_button_2 : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_2)
-        val overlay_comments_button_1 : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_1)
+        val overlay_comments_button_5   : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_5)
+        val overlay_comments_button_4   : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_4)
+        val overlay_comments_button_3   : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_3)
+        val overlay_comments_button_2   : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_2)
+        val overlay_comments_button_1   : TextView       = dialog.findViewById<TextView>(R.id.overlay_comments_button_1)
 
-        val overlay_comment_list = dialog.findViewById<ScrollView>(R.id.overlay_comment_list)
-        var list_of_buttons_filter = mutableListOf<TextView>(overlay_comments_button_all, overlay_comments_button_5, overlay_comments_button_4, overlay_comments_button_3, overlay_comments_button_2, overlay_comments_button_1 )
+        val overlay_comment_list    = dialog.findViewById<ScrollView>(R.id.overlay_comment_list)
+        var list_of_buttons_filter  = mutableListOf<TextView>(overlay_comments_button_all, overlay_comments_button_5, overlay_comments_button_4, overlay_comments_button_3, overlay_comments_button_2, overlay_comments_button_1 )
 
         for(element in list_of_buttons_filter){
             element.setOnClickListener{ setCommentsFilterInOverlayDialogForMoreComments(list_of_buttons_filter, element) }
@@ -199,15 +240,15 @@ class ProductViewFragment : Fragment() {
         overlay_closeButton.setOnClickListener { dialog.dismiss() }
 
 
-        var row: LinearLayout
-        row = LinearLayout(requireContext())
-        row.orientation = LinearLayout.VERTICAL
+
+        row_in_all_comments = LinearLayout(requireContext())
+        row_in_all_comments.orientation = LinearLayout.VERTICAL
         val layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )
-        row.layoutParams = layoutParams
-        overlay_comment_list.addView(row)
+        row_in_all_comments.layoutParams = layoutParams
+        overlay_comment_list.addView(row_in_all_comments)
 
 
         var url:String = Config.ip_address+":"+ Config.port + "/getComments/"+product_id
@@ -215,80 +256,13 @@ class ProductViewFragment : Fragment() {
             {response->
                 val gson = Gson()
                 val listType = object : TypeToken<List<ProductComment>>() {}.type
-                val commentsList: List<ProductComment> = gson.fromJson(response, listType)
+                list_of_comments = gson.fromJson(response, listType)
 
-                println(commentsList)
-
-//                Comments.renderComments(commentsList, row, requireActivity(), requireContext())
-
-
-//                =============================
-                val marginInDp = 4
-                val marginInPx = (marginInDp * resources.displayMetrics.density).toInt()
-                val itemLayoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-                )
-                itemLayoutParams.setMargins(0, (marginInDp+14), 0, 0)
-
-                val widthInDp = 15
-                val heightInDp = 15
-
-                val density = resources.displayMetrics.density
-
-                val widthInPx = (widthInDp * density).toInt()
-                val heightInPx = (heightInDp * density).toInt()
-
-                var commentParams = LinearLayout.LayoutParams(widthInPx, heightInPx)
-                commentParams.rightMargin = marginInPx
-
-                for((index, comment) in commentsList.withIndex()){
-                    val itemView = layoutInflater.inflate(R.layout.component_comment, null)
-                    val comment_image           = itemView.findViewById<ImageView>(R.id.comment_image)
-                    val comment_username        = itemView.findViewById<TextView>(R.id.comment_username)
-                    val comment_comment         = itemView.findViewById<TextView>(R.id.comment_comment)
-                    val comment_horizontal_star = itemView.findViewById<LinearLayout>(R.id.horizontal_layout_star)
-                    comment_username.text = comment.username
-                    comment_comment.text = comment.text
-                    for(i in 0 until comment.grade){
-                        val star = ImageView(context)
-                        star.layoutParams = commentParams
-                        star.setImageResource(R.drawable.star_filled)
-                        comment_horizontal_star.addView(star)
-                    }
-                    for(i in 0 until (5-comment.grade)){
-                        val star = ImageView(context)
-                        star.layoutParams = commentParams
-                        star.setImageResource(R.drawable.star)
-                        comment_horizontal_star.addView(star)
-                    }
-                    itemView.layoutParams = itemLayoutParams
-                    val comment_text        = itemView.findViewById<TextView>(R.id.comment_comment)
-                    comment_text.maxLines   = Int.MAX_VALUE
-                    comment_text.ellipsize  = null
-                    row.addView(itemView);
-                }
-//                =============================
-
-
-
+                Comments.renderComments(list_of_comments, row_in_all_comments,"VERTICAL" ,requireActivity(), requireContext())
             },
             {error->
                 println(error)
             })
-
-//            val itemView = layoutInflater.inflate(R.layout.component_comment, null)
-//            val layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//            itemView.minimumWidth   =  ViewGroup.LayoutParams.MATCH_PARENT
-//            itemView.layoutParams = layoutParams
-//
-//                val comment_text        = itemView.findViewById<TextView>(R.id.comment_comment)
-//                comment_text.maxLines   = Int.MAX_VALUE
-//                comment_text.ellipsize  = null
-//            overlay_comment_list.addView(itemView)
 
         dialog.show()
     }
