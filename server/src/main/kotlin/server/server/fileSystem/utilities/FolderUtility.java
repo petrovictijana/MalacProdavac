@@ -3,6 +3,9 @@ package server.server.fileSystem.utilities;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.DirectoryStream;
@@ -40,5 +43,10 @@ public class FolderUtility {
         try (InputStream inputStream = resource.getInputStream()) {
             return StreamUtils.copyToByteArray(inputStream);
         }
+    }
+
+    public static BufferedImage convertByteArrayToImage(byte[] byteArray) throws IOException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+        return ImageIO.read(byteArrayInputStream);
     }
 }
