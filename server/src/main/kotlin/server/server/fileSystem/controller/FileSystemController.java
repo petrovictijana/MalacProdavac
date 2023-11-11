@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import server.server.fileSystem.CustomMultipartFile;
+import server.server.fileSystem.MyRequest;
 import server.server.fileSystem.MyResponse;
 import server.server.fileSystem.service.StorageService;
 import server.server.fileSystem.utilities.FolderUtility;
@@ -25,11 +27,19 @@ public class FileSystemController {
         this.storageService = storageService;
     }
 
+//    @PostMapping("/profile-picture-upload")
+//    public int profilePictureUpload(@RequestParam("username") String username,
+//                                    @RequestParam("file") MultipartFile multipartFile,
+//                                    RedirectAttributes redirectAttributes){
+//        return storageService.store(username, multipartFile, ImageType.USER);
+//    }
+
     @PostMapping("/profile-picture-upload")
-    public int profilePictureUpload(@RequestParam("username") String username,
-                                    @RequestParam("file") MultipartFile multipartFile,
+    public int profilePictureUpload(@RequestBody MyRequest myRequest,
                                     RedirectAttributes redirectAttributes){
-        return storageService.store(username, multipartFile, ImageType.USER);
+        return storageService.store(myRequest.getUsername(),
+                new CustomMultipartFile(myRequest.getImage()),
+                ImageType.USER);
     }
 
     @PostMapping("/product-picture-upload")
@@ -56,10 +66,6 @@ public class FileSystemController {
 
         return ResponseEntity.ok()
                 .body(myResponse);
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-//                .header(HttpHeaders.CONTENT_TYPE, contentType)
-//                .body(file);
     }
 
     // Pomoćna metoda za određivanje Content-Type na osnovu ekstenzije fajla
