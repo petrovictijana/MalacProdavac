@@ -32,7 +32,7 @@ data class Seller(
     var latitude: Double
 )
 
-data class SellersResponse(
+data class ProductViewResponse(
     var sellerDTO: Seller,
     var productDTO: Product,
     var productCommentList: List<ProductComment>

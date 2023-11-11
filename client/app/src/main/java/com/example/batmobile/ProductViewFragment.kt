@@ -1,22 +1,31 @@
 package com.example.batmobile
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.example.batmobile.DTOFromServer.Product
 import com.example.batmobile.DTOFromServer.ProductComment
+import com.example.batmobile.DTOFromServer.ProductViewResponse
 import com.example.batmobile.DTOFromServer.Seller
-import com.example.batmobile.DTOFromServer.SellersResponse
 import com.example.batmobile.network.ApiClient
 import com.example.batmobile.network.Config
 import com.google.gson.Gson
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 
 class ProductViewFragment : Fragment() {
     private lateinit var view               : View
@@ -36,6 +45,9 @@ class ProductViewFragment : Fragment() {
     private lateinit var person_household   : TextView
     private lateinit var person_username    : TextView
     private lateinit var person_location    : TextView
+
+    private lateinit var product_view_response:  ProductViewResponse
+    private lateinit var seller_location    : String
 
     fun getAllStuff(){
         apiClient = ApiClient(requireContext())
@@ -62,7 +74,8 @@ class ProductViewFragment : Fragment() {
         apiClient.sendGetRequestEmpty(url,
             {response->
                 val gson = Gson()
-                val sellersResponse = gson.fromJson(response, SellersResponse::class.java)
+                val sellersResponse = gson.fromJson(response, ProductViewResponse::class.java)
+                product_view_response = sellersResponse
                 renderProduct(sellersResponse.productDTO)
                 renderHousehold(sellersResponse.sellerDTO)
                 renderComments(sellersResponse.productCommentList)
@@ -82,7 +95,8 @@ class ProductViewFragment : Fragment() {
         product_id = args.productId
 
         getAllStuff()
-        back_button.setOnClickListener{findNavController().navigateUp()}
+        back_button     .setOnClickListener{ findNavController().navigateUp() }
+        person_location .setOnClickListener{ showOverlayDialog() }
 
         getInformationOfProduct(product_id)
 
@@ -101,7 +115,7 @@ class ProductViewFragment : Fragment() {
         person_household.setText("Domaćinstvo "+seller_information.surname)
         person_username.setText("@ "+seller_information.username)
         apiClient.getAddressFromCoordinates(requireContext(),seller_information.latitude, seller_information.longitude,
-            {response-> person_location.text = response }, {  })
+            {response-> seller_location = response ; person_location.text = response }, {  })
     }
 
     fun renderComments(product_comments: List<ProductComment>){
@@ -164,6 +178,47 @@ class ProductViewFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun showOverlayDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.overlay_household_location)
+
+        val overlay_closeButton: ImageView      = dialog.findViewById<ImageView>(R.id.overlay_household_location_close)
+        val overlay_person_household            = dialog.findViewById<TextView>(R.id.person_household)
+        val overlay_person_username             = dialog.findViewById<TextView>(R.id.person_username)
+        val overlay_person_location             = dialog.findViewById<TextView>(R.id.person_location)
+        val overlay_map                         = dialog.findViewById<MapView>(R.id.mapView)
+        overlay_closeButton.setOnClickListener { dialog.dismiss() }
+
+        overlay_person_household.text = "Domaćinstvo "  +   product_view_response.sellerDTO.surname
+        overlay_person_username.text  = "@ "            +   product_view_response.sellerDTO.username
+        overlay_person_location.text  = seller_location
+        setMap(overlay_map, product_view_response.sellerDTO.latitude, product_view_response.sellerDTO.longitude)
+        // Prikazivanje dialoga
+        dialog.show()
+    }
+
+    fun setMap(mapView:MapView, latitude:Double, longitude:Double){
+        Configuration.getInstance().userAgentValue = requireActivity().packageName
+        // Postavite parametre mape
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setBuiltInZoomControls(true)
+
+        val newPoint = GeoPoint(latitude, longitude)
+        mapView.controller.setCenter(newPoint)
+        mapView.controller.setZoom(13.0)
+        // Dodavanje pina na tacnu lokaciju
+        val items = ArrayList<OverlayItem>()
+        val overlayItem = OverlayItem("Lokacija", "Lokacija domacinstva", newPoint)
+        overlayItem.setMarker(ContextCompat.getDrawable(requireContext(), R.drawable.location_pin))
+        items.add(overlayItem)
+
+        val overlay = ItemizedIconOverlay<OverlayItem>(items, null, requireContext())
+        mapView.overlays.clear()
+        mapView.overlays.add(overlay)
     }
 
 }
