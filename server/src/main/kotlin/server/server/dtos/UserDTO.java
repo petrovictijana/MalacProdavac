@@ -12,6 +12,6 @@ public class UserDTO {
     private String surname;
     private String username;
     private String email;
-    private String picture;
+    private byte[] picture;
     private String role;
 }

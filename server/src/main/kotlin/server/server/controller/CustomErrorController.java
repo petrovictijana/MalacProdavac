@@ -8,6 +8,8 @@ import server.server.dtos.response.PibAlreadyExistsResponse;
 import server.server.errors.ErrorResponse;
 import server.server.exceptions.*;
 
+import java.nio.file.NoSuchFileException;
+
 @ControllerAdvice
 public class CustomErrorController {
     @ExceptionHandler(EmailUsernameAlreadyTakenException.class)
@@ -115,6 +117,18 @@ public class CustomErrorController {
                 .code(status.value())
                 .status(status.name())
                 .message(e.getMessage())
+                .data(null)
+                .build(), status);
+    }
+
+    @ExceptionHandler(NoSuchFileException.class)
+    public ResponseEntity<ErrorResponse> handleNoSuchFileException(Exception e){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .code(status.value())
+                .status(status.name())
+                .message("Ne postoji fajl za dati username")
                 .data(null)
                 .build(), status);
     }
