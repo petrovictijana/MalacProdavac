@@ -77,6 +77,7 @@ class ExploreNeulogovanFragment : Fragment() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
+                layoutParams.setMargins(0, 0, 0, 20)
                 row.layoutParams = layoutParams
                 linear_container.addView(row)
             }
@@ -87,7 +88,7 @@ class ExploreNeulogovanFragment : Fragment() {
                 1f
             )
 
-            val marginInPx = 4
+            val marginInPx = 8
             itemLayoutParams.setMargins(marginInPx, 0, marginInPx, 0)
             itemView.setPadding(marginInPx, marginInPx, marginInPx, marginInPx)
             itemView.layoutParams = itemLayoutParams
