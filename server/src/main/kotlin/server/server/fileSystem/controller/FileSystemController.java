@@ -3,10 +3,12 @@ package server.server.fileSystem.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import server.server.errors.SuccessResponse;
 import server.server.fileSystem.CustomMultipartFile;
 import server.server.fileSystem.MyRequest;
 import server.server.fileSystem.MyResponse;
@@ -26,13 +28,6 @@ public class FileSystemController {
     public FileSystemController(StorageService storageService){
         this.storageService = storageService;
     }
-
-//    @PostMapping("/profile-picture-upload")
-//    public int profilePictureUpload(@RequestParam("username") String username,
-//                                    @RequestParam("file") MultipartFile multipartFile,
-//                                    RedirectAttributes redirectAttributes){
-//        return storageService.store(username, multipartFile, ImageType.USER);
-//    }
 
     @PostMapping("/profile-picture-upload")
     public int profilePictureUpload(@RequestBody MyRequest myRequest,
@@ -64,8 +59,16 @@ public class FileSystemController {
                 .image(FolderUtility.convertResourceToByteArray(file))
                 .build();
 
+        SuccessResponse successResponse = SuccessResponse.builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK.name())
+                .success(true)
+                .message("User image successfully returned.")
+                .data(myResponse)
+                .build();
+
         return ResponseEntity.ok()
-                .body(myResponse);
+                .body(successResponse);
     }
 
     // Pomoćna metoda za određivanje Content-Type na osnovu ekstenzije fajla

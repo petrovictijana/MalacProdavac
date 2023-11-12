@@ -60,7 +60,7 @@ public class StorageServiceImpl implements StorageService {
                 if (resource.exists())
                     return resource;
             }
-            throw new RuntimeException("Nema sta da se procita...");
+            throw new NoSuchFileException("Ne postoji fotografija za dati username");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
