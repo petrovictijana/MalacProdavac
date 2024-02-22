@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BatMobile</string>
+
+    <string name="malac_prodavac">Malac Prodavac</string>
+    <string name="slogan">Mali proizvođači, veliki izbor!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
